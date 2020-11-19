@@ -3,7 +3,7 @@ import com.github.nscala_time.time.Imports.DateTime
 
 case class Comment(user: User, date: DateTime, content: String)
 
-case class SharedFile(fileName: String, id: Int, path: String, comments: List[Comment]) extends Serializable {
+case class SharedFile(fileName: String, id: Int, path: String, comments: List[Comment]) extends Serializable{
    def getName() = SharedFile.getName(this)
    def getId() = SharedFile.getId(this)
    def getPath() = SharedFile.getPath(this)

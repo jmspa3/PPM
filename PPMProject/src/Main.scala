@@ -1,3 +1,4 @@
+import DBPackage.{Database, Table}
 import Task.isDone
 import com.github.nscala_time.time.Imports.DateTime
 import org.joda.time.Days
@@ -5,9 +6,10 @@ import org.joda.time.Days
 
 import scala.annotation.tailrec
 import scala.io.StdIn.readLine
+import scala.util.Try
 
 object Main {
-   sharedFileMenu()
+   sharedFileMenu(User(1))
 
    def main(args: Array[String]): Unit = {
       val deadline = (new DateTime).withYear(2020)
@@ -21,9 +23,8 @@ object Main {
 
    }
 
-   def sharedFileMenu() = {
+   def sharedFileMenu(user: User) = {
       val databasePath = "savedFiles"
-      val user = User(1)
       mainLoopFileMenu()
 
       def mainLoopFileMenu(): Any = {
@@ -36,30 +37,47 @@ object Main {
          userChoice match {
             case "0" => println("Exiting...")
             case "1" => {
-               val savedFiles = StorageManager.readObjectFromFile(databasePath)
-               savedFiles.asInstanceOf[List[SharedFile]].map(x => println("File: " + x))
-               println("What file do you wish to inspect (ID)? ")
-               val fileId = readLine().trim
-               inspectFileMenu(fileId, databasePath, user)
+               val savedDatabase = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
+               val savedFiles = savedDatabase.getTableByName("SharedFile").records.values.asInstanceOf[Iterable[SharedFile]]
+               if (savedFiles.size != 0) {
+                  savedFiles.map(x => println("File: " + x.getId + " " + x.getName))
+                  println("What file do you wish to inspect (ID)? Write Q if you don't wish to inspect any of them")
+                  val fileId = readLine().trim
+                  fileId match {
+                     case "q" | "Q" => mainLoopFileMenu()
+                     case _ => {
+                        if (Try(fileId.toInt).isSuccess) inspectFileMenu(fileId, databasePath, user)
+                        else {
+                           println("Not a valid file Id!")
+                           mainLoopFileMenu()
+                        }
+                     }
+                  }
+               }
+               else {
+                  println("There are no shared files at the moment!")
+                  mainLoopFileMenu()
+               }
             }
             case "2" => {
                println("Insert file path: ")
                val newFilePath = readLine().trim
                val newFileName = newFilePath.split("/").last
-               val savedFiles = StorageManager.readObjectFromFile(databasePath).asInstanceOf[List[SharedFile]]
+               val savedFiles = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database].getTableByName("SharedFile")
                val sh = new SharedFile(newFileName, {
-                  if (savedFiles.length > 0) savedFiles.last.getId() + 1 else 0
+                  if (savedFiles.records.values.size > 0) savedFiles.records.values.last.asInstanceOf[SharedFile].getId() + 1 else 0
                }, newFilePath, List())
-               StorageManager.writeObjectInFile(sh, databasePath, append = true)
+               StorageManager.addObjectToFile(sh, databasePath)
                mainLoopFileMenu()
             }
             case "3" => {
-               val savedFiles = StorageManager.readObjectFromFile(databasePath)
-               savedFiles.asInstanceOf[List[SharedFile]] map (x => println(x))
+               val savedDatabase = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
+               val savedFiles = savedDatabase.getTableByName("SharedFile").records.values.asInstanceOf[Iterable[SharedFile]]
+               savedFiles.map(x => println("File: " + x.getId + " " + x.getName))
                println("Insert ID of file to delete: ")
                val fileId = readLine().trim.toInt
-               val newSavedFiles = savedFiles.asInstanceOf[List[SharedFile]].filter(x => x.getId() != fileId)
-               StorageManager.writeObjectListInFile(newSavedFiles, databasePath, append = false)
+               val newFileList = savedFiles.filter(x => x.getId() != fileId)
+               StorageManager.writeObjectListInFile(newFileList.toList, databasePath)
                mainLoopFileMenu()
             }
             case _ => {
@@ -72,9 +90,8 @@ object Main {
 
 
    def inspectFileMenu(fileId: String, databasePath: String, user: User): Unit = {
-      val file = StorageManager.readObjectFromFile(databasePath).asInstanceOf[List[SharedFile]].filter(x => x.getId() == fileId.toInt).head
+      val file = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database].getTableByName("SharedFile").records.asInstanceOf[Map[Int, SharedFile]].values.find(x => x.id == fileId.toInt).get
       mainLoopInspectedFileMenu(file)
-
       def mainLoopInspectedFileMenu(inspectedFile : SharedFile): Any = {
          println("Inspected File Menu:\n")
          println("1. Check File Properties")
@@ -86,7 +103,7 @@ object Main {
             case "0" =>
             {
                println("Exiting...")
-               sharedFileMenu()
+               sharedFileMenu(user)
             }
             case "1" =>
             {
@@ -106,10 +123,12 @@ object Main {
                println("Write your comment: ")
                val commentContent = readLine.trim
                val newFile = SharedFile(inspectedFile.getName, inspectedFile.getId, inspectedFile.getPath, inspectedFile.getComments ++ List(new Comment(user, DateTime.now, commentContent)))
-               val savedFiles = StorageManager.readObjectFromFile(databasePath).asInstanceOf[List[SharedFile]]
-               val fileIndex = savedFiles.indexOf(inspectedFile)
-               val newSavedFiles = savedFiles.updated(fileIndex, newFile)
-               StorageManager.writeObjectListInFile(newSavedFiles ,databasePath, false)
+
+               val savedFiles = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database].getTableByName("SharedFile").records.values.asInstanceOf[Iterable[SharedFile]]
+               val fileIndex = savedFiles.toList.indexOf(inspectedFile)
+               val newSavedFiles = savedFiles.toList.updated(fileIndex, newFile)
+
+               StorageManager.writeObjectListInFile(newSavedFiles, databasePath)
                mainLoopInspectedFileMenu(newFile)
             }
          }
