@@ -1,0 +1,15 @@
+_______________________________________________
+def main antigo!
+
+val deadline = (new DateTime).withYear(2020)
+      .withMonthOfYear(11)
+      .withDayOfMonth(6)
+
+    val task: Task = Task(1,"nome",DateTime.now(),deadline,false,"high")
+    task.daysLeft()
+    val taskDone : Task = task.setDone()
+    println(taskDone.name)
+
+
+
+_______________________________________________
