@@ -2,6 +2,7 @@ package PPMProject
 import java.util.Date
 
 import com.github.nscala_time.time.Imports.DateTime
+
 import scala.io.StdIn.readLine
 import scala.util.Try
 
@@ -69,7 +70,7 @@ object Main {
       }
 
       case "4" => {
-       taskMenu(User)
+       taskMenu(user, databasePath)
         mainMenu(user, databasePath)
       }
       case _ => {
@@ -85,7 +86,7 @@ object Main {
     mainLoopUserMenu(user, databasePath)
 
     def mainLoopUserMenu(user: User, databasePath: String): Any = {
-      println("SharedFile Menu:")
+      println("User Menu:")
       println("1. Check Users")
       println("2. Create New User")
       println("3. Delete User")
@@ -131,7 +132,7 @@ object Main {
   }
   def taskMenu(user: User, databasePath: String) = {
     val databasePath = "savedTasks"
-    mainLoopTaskMenu()
+    mainLoopTaskMenu(user, databasePath)
 
     def mainLoopTaskMenu(user: User, databasePath: String): Any = {
       println("Task Menu:\n")
@@ -151,7 +152,7 @@ object Main {
           else {
             println("There are no tasks at the moment!")
           }
-          mainLoopTaskMenu()
+          mainLoopTaskMenu(user, databasePath)
         }
         case "2" => {
           println("Insert task name: ")
@@ -162,17 +163,17 @@ object Main {
           },newTaskName, DateTime.now(),false,"High")
 
           StorageManager.addObjectToFile(sh, databasePath)
-          mainLoopTaskMenu()
+          mainLoopTaskMenu(user, databasePath)
         }
         case "3" => {
            val className = "Task"
            val existingProjects = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
-           val savedProjects = existingProjects.getTableByName(className).records.values.asInstanceOf[Iterable[Task]]
+           val savedTasks = existingProjects.getTableByName(className).records.values.asInstanceOf[Iterable[Task]]
 
            savedTasks.map(x => println("Task: " + x.getId + " " + x.getName))
            println("Insert Task ID To Delete: ")
            val taskId = readLine().trim.toInt
-           val newExistingTasks = savedProjects filter (x => x.getId != tasktId)
+           val newExistingTasks = savedTasks filter (x => x.getId != taskId)
            try {
               StorageManager.writeObjectListInFile(newExistingTasks.toList, databasePath, className)
            } catch {
@@ -182,7 +183,7 @@ object Main {
         }
         case _ => {
           println("Invalid choice!")
-          mainLoopTaskMenu()
+          mainLoopTaskMenu(user, databasePath)
         }
       }
     }   }

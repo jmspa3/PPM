@@ -1,10 +1,7 @@
 package PPMProject
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import com.github.nscala_time.time.Imports._
 import org.joda.time.Days
 
-case class User(id : Int)
 
 case class Task(id: Int, name : String, creationDate: DateTime, done : Boolean ,priority: String) extends Serializable {
   def daysLeft(): Unit = Task.daysLeft(this)
