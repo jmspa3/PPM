@@ -90,7 +90,7 @@ object Main {
       println("1. Check Users")
       println("2. Create New User")
       println("3. Delete User")
-      println("0. Voltar atrás")
+      println("0. Go Back")
       val userChoice = readLine.trim
       userChoice match {
         case "0" => println("Exiting...")
@@ -139,7 +139,7 @@ object Main {
       println("1. Check uploaded tasks")
       println("2. Upload new Task")
       println("3. Discard Task")
-      println("0. Exit program")
+      println("0. Go Back")
       val userChoice = readLine.trim
       userChoice match {
         case "0" => println("Exiting...")
@@ -195,7 +195,7 @@ object Main {
       println("1. Check Existing Projects")
       println("2. Create New Project")
       println("3. Delete Project")
-      println("0. Voltar atrás")
+      println("0. Go Back")
       val userChoice = readLine.trim
       userChoice match {
         case "0" => println("Voltar ao menu principal")
@@ -252,7 +252,7 @@ object Main {
       println("1. Check uploaded files")
       println("2. Upload new File")
       println("3. Discard File")
-      println("0. Exit program")
+      println("0. Go Back")
       val userChoice = readLine.trim
       userChoice match {
         case "0" => println("Exiting...")
