@@ -1,4 +1,4 @@
-package PPM
+package PPMProject
 import java.io._
 import java.util.Date
 
@@ -6,15 +6,15 @@ import java.util.Date
 
 case class Project(owner: User, name: String, description: String, id: Int, list_members: List[User], list_files: List[SharedFile], list_tasks: List[Task], date_creation: Date) extends Serializable {
 
-  def getOwner() = Project.getOwner(this)
-  def getProjectName() = Project.getProjectName(this)
-  def getProjectDescription() = Project.getProjectDescription(this)
-  def getProjectId() = Project.getProjectId(this)
-  def getListMembers() = Project.getListMembers(this)
-  def getListFiles() = Project.getListFiles(this)
-  def getListTasks() = Project.getListTasks(this)
-  def getCreationDate() = Project.getCreationDate(this)
-  override def toString() = Project.toString(this)
+  def getOwner: User = Project.getOwner(this)
+  def getProjectName: String = Project.getProjectName(this)
+  def getProjectDescription: String = Project.getProjectDescription(this)
+  def getProjectId: Int = Project.getProjectId(this)
+  def getListMembers: List[User] = Project.getListMembers(this)
+  def getListFiles: List[SharedFile] = Project.getListFiles(this)
+  def getListTasks: List[Task] = Project.getListTasks(this)
+  def getCreationDate: Date = Project.getCreationDate(this)
+  override def toString: String = Project.toString(this)
 
 }
 
@@ -33,39 +33,39 @@ object Project {
 
 
   def getOwner(p: Project): User = {
-    return p.owner
+    p.owner
   }
 
   def getProjectName(p: Project): String = {
-    return p.name
+    p.name
   }
 
   def getProjectDescription(p: Project): String = {
-    return p.description
+    p.description
   }
 
   def getProjectId(p: Project): Int = {
-    return p.id
+    p.id
   }
 
   def getListMembers(p: Project): List[User] = {
-    return p.list_members
+    p.list_members
   }
 
   def getListFiles(p: Project): List[SharedFile] = {
-    return p.list_files
+    p.list_files
   }
 
   def getListTasks(p: Project): List[Task] = {
-    return p.list_tasks
+    p.list_tasks
   }
 
   def getCreationDate(p: Project): Date = {
-    return p.date_creation
+    p.date_creation
   }
 
   def toString(p: Project): String = {
-    return "Name: " + p.name + "\nDescription: " + p.description + "\nOwned By: " + p.owner + "\nCreated On: " + p.date_creation
+    "ID: " + p.id + "\nName: " + p.name + "\nDescription: " + p.description + "\nOwned By: " + p.owner.getUsername + "; " + p.owner.getUserId + "\nCreated On: " + p.date_creation + "\n"
   }
 
 }

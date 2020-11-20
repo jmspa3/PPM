@@ -1,18 +1,18 @@
-package PPM
+package PPMProject
 
 import java.io.Serializable
 import java.util.Date
 
+//VER MESSAGE DIGEST PARA ENCRIPTAÇÃO DE PASSWORDS
 
 
-
-case class User(name: String, id: Int, creation_date: Date, participating_projects: List[Project]) extends Serializable {
-  def getUsername = User.getUsername(this)
-  def getUserId = User.getUserId(this)
-  def getCreationDate = User.getCreationDate(this)
-  def getParticipatingProjects = User.getParticipatingProjects(this)
-  def setParticipatingProjects = User.setParticipatingProjects(this)
-  override def toString = User.toString(this)
+case class User(name: String = "guest", id: Int = 0, creation_date: Date = new Date(), participating_projects: List[Project] = List()) extends Serializable {
+  def getUsername: String = User.getUsername(this)
+  def getUserId: Int = User.getUserId(this)
+  def getCreationDate: Date = User.getCreationDate(this)
+  def getParticipatingProjects: List[Project] = User.getParticipatingProjects(this)
+  def setParticipatingProjects(): User = User.setParticipatingProjects(this)
+  override def toString: String = User.toString(this)
 
 }
 
@@ -48,7 +48,7 @@ object User {
 
     "Name : " + u.name +
       "\nID = " + u.id + "\nCreated On : " + u.creation_date +
-      "\nParticipating Projects : " + u.participating_projects + "\n";
+      "\nParticipating Projects : " + u.participating_projects + "\n"
   }
 
 }
