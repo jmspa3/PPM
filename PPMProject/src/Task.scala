@@ -9,6 +9,8 @@ case class User(id : Int)
 case class Task(id: Int, name : String, creationDate: DateTime, deadline : DateTime, done : Boolean ,priority: String) {
   def daysLeft(): Unit = Task.daysLeft(this)
   def setDone(): Task = Task.setDone(this)
+  def isDone(): Boolean = Task.isDone(this)
+  def getPriority(): String = Task.getPriority(this)
   def editName(newName : String): Task = Task.editName(this,newName)
 
 }
@@ -32,6 +34,14 @@ object Task{
   def daysLeft(t:Task): Unit = {
     val daysToDeadline = Days.daysBetween(t.creationDate, t.deadline).getDays
     println(daysToDeadline)
+  }
+
+  def isDone(t:Task): Boolean = {
+    t.done
+  }
+
+  def getPriority(t:Task): String = {
+    t.priority
   }
 
   def setDone(t:Task): Task = {
