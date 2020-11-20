@@ -69,7 +69,7 @@ object Main {
       }
 
       case "4" => {
-        //taskMenu(User)
+       taskMenu(User)
         mainMenu(user, databasePath)
       }
       case _ => {
@@ -129,7 +129,69 @@ object Main {
       }
     }
   }
+  def taskMenu(user: User) = {
+    val databasePath = "savedTasks"
+    mainLoopTaskMenu()
 
+    def mainLoopTaskMenu(): Any = {
+      println("Task Menu:\n")
+      println("1. Check uploaded tasks")
+      println("2. Upload new Task")
+      println("3. Discard Task")
+      println("0. Exit program")
+      val userChoice = readLine.trim
+      userChoice match {
+        case "0" => println("Exiting...")
+        case "1" => {
+          val savedDatabase = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
+          val savedFiles = savedDatabase.getTableByName("Task").records.values.asInstanceOf[Iterable[Task]]
+          if (savedFiles.size != 0) {
+            savedFiles.map(x => println("Task: " + x.getId + " " + x.getName))
+          }
+          else {
+            println("There are no tasks at the moment!")
+          }
+          mainLoopTaskMenu()
+        }
+        case "2" => {
+          println("Insert task name: ")
+          val newTaskName = readLine()
+          val savedTasks = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database].getTableByName("Task")
+          val sh = new Task({
+            if (savedTasks.records.values.size > 0) savedTasks.records.values.last.asInstanceOf[Task].getId() + 1 else 0
+          },newTaskName, DateTime.now(),false,"High")
+
+          StorageManager.addObjectToFile(sh, databasePath)
+          mainLoopTaskMenu()
+        }
+        case "3" => {
+          val savedDatabase = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
+          val savedTasks = savedDatabase.getTableByName("Task").records.values.asInstanceOf[Iterable[Task]]
+          savedTasks.map(x => println("Task: " + x.getId + " " + x.getName))
+          println("Insert ID of task to delete: ")
+          val taskId = readLine.trim.toInt
+
+          val newTaskList = savedTasks.filter(x => x.getId() != taskId)
+          StorageManager.writeObjectListInFile(newTaskList.toList, databasePath)
+          mainLoopTaskMenu()
+
+          val className = "SharedFile"
+          val savedDatabase = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
+          val savedFiles = savedDatabase.getTableByName(className).records.values.asInstanceOf[Iterable[SharedFile]]
+
+          savedFiles.map(x => println("File: " + x.getId + " " + x.getName))
+          println("Insert ID of file to delete: ")
+          val fileId = readLine().trim.toInt
+          val newFileList = savedFiles.filter(x => x.getId() != fileId)
+          StorageManager.writeObjectListInFile(newFileList.toList, databasePath, className)
+          mainLoopFileMenu(user, databasePath)
+        }
+        case _ => {
+          println("Invalid choice!")
+          mainLoopTaskMenu()
+        }
+      }
+    }   }
   def projectMenu(user: User, databasePath: String) = {
     val projectsPath = "savedProjects"
     mainLoopProjectMenu(user, databasePath)
