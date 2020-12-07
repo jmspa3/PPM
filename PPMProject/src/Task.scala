@@ -29,7 +29,7 @@ object Task{
 
   // 2: get a date to represent Christmas
 
-  def editName(t:Task, newName:String): Task  = {
+  def editName(t:Task)(newName:String): Task  = {
     Task(t.id,newName,t.creationDate,t.done,t.priority)
   }
   def daysLeft(t:Task): Unit = {
