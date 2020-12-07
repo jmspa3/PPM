@@ -11,7 +11,7 @@ case class Task(id: Int, name : String, creationDate: LocalDate, done : Boolean 
   def getId(): Int = Task.getID(this)
   def getName(): String = Task.getName(this)
   def getPriority(): String = Task.getPriority(this)
-  def editName(newName : String): Task = Task.editName(this,newName)
+  def editName(newName : String): Task = Task.editName(this)(newName)
 
 }
 
