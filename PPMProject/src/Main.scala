@@ -1,8 +1,6 @@
 package PPMProject
 import java.util.Date
-
-import com.github.nscala_time.time.Imports.DateTime
-
+import java.time._
 import scala.io.StdIn.readLine
 import scala.util.Try
 
@@ -160,7 +158,7 @@ object Main {
           val savedTasks = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database].getTableByName("Task")
           val sh = new Task({
             if (savedTasks.records.values.size > 0) savedTasks.records.values.last.asInstanceOf[Task].getId() + 1 else 0
-          },newTaskName, DateTime.now(),false,"High")
+          },newTaskName, LocalDate.now(),false,"High")
 
           StorageManager.addObjectToFile(sh, databasePath)
           mainLoopTaskMenu(user, databasePath)
