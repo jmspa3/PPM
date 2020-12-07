@@ -8,24 +8,45 @@ import scala.util.Try
 
 object Main {
 
+  val databasePath = "savedFiles"
+  //val pathToUsers = "savedUsers"
+
+  //Exemplo de Currying, addUser com 2 args e addUser2 que vem com o 2º arg predefinido. Útil para adicionar o utilizador no login
+  def addUser(newUser: String)(databasePath: String): User = {
+    val existingUsers = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database].getTableByName("User")
+    val us = new User(newUser, {
+      if (existingUsers.records.values.size > 0) existingUsers.records.values.last.asInstanceOf[User].getUserId + 1 else 0
+    }, new Date(), List())
+    StorageManager.addObjectToFile(us, databasePath)
+    us
+  }
+
+  //A ser usado no login
+  def addUser2 = addUser(_: String)(databasePath): User
+
+  //To be used in Higher Order Function, mapping
+  def customFilter(s1: String, s2: String): Boolean = {
+    s1 == s2
+  }
 
   def main(args: Array[String]): Unit = {
     println("Welcome to PPMProject. Insert your Username: ")
-    val databasePath = "savedFiles"
-    val pathToUsers = "savedUsers"
+
     val username = readLine().trim
     //procurar na BD o user com o nome fornecido
     val existingUsers = StorageManager.readDatabaseFile(databasePath)
     val teste = existingUsers.asInstanceOf[Database].getTableByName("User").records.values.asInstanceOf[Iterable[User]].toList
-    var user: User = new User()
+    val user: User = new User()
     try {
-      val userlist = teste filter (x => x.getUsername == username)
-      user = userlist.head
+      val userlist = teste filter (x => customFilter(x.getUsername, username)) //Higher Order Function Application
+      val newuser = userlist.head
+      mainMenu(newuser, databasePath)
     } catch {
-      case e: NoSuchElementException => user = createUser(teste, databasePath)
+      case e: NoSuchElementException => val newexuser = createUser(teste, databasePath)
+        mainMenu(newexuser, databasePath)
     }
 
-    mainMenu(user, databasePath)
+
   }
 
   def createUser(existingUsers: List[User], databasePath: String): User = {
@@ -36,11 +57,15 @@ object Main {
 
     val userChoice = readLine.trim
     userChoice match {
-      case "1" => println("Insert your username")
+      case "1" => {
+        println("Insert your username")
         val username = readLine().trim
-        new User(username, { if (existingUsers.length > 0) existingUsers.last.getUserId + 1 else 0 }, new Date(), List())
-      case _ => println("Continuing as Guest")
+        addUser2(username)
+      }
+      case _ =>{
+        println("Continuing as Guest")
         new User()
+      }
     }
 
   }
@@ -61,7 +86,7 @@ object Main {
       }
 
       case "2" => {
-        userMenu(user, databasePath)
+        userMenu(user, databasePath)("savedUsers")
         mainMenu(user, databasePath)
       }
       case "3" => {
@@ -70,7 +95,7 @@ object Main {
       }
 
       case "4" => {
-       taskMenu(user, databasePath)
+        taskMenu(user, databasePath)
         mainMenu(user, databasePath)
       }
       case _ => {
@@ -81,15 +106,21 @@ object Main {
   }
 
 
-  def userMenu(user: User, databasePath: String) = {
-    val usersPath = "savedUsers"
+
+
+
+  def userMenu(user: User, databasePath: String)(usersPath: String) = {
+    //val usersPath = "savedUsers"
     mainLoopUserMenu(user, databasePath)
+
 
     def mainLoopUserMenu(user: User, databasePath: String): Any = {
       println("User Menu:")
       println("1. Check Users")
       println("2. Create New User")
       println("3. Delete User")
+      println("4. Associate with Project")
+      println("5. De-associate with Project")
       println("0. Go Back")
       val userChoice = readLine.trim
       userChoice match {
@@ -102,26 +133,50 @@ object Main {
         case "2" => {
           println("Insert Username: ")
           val newUser = readLine().trim
-          val existingUsers = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database].getTableByName("User")
-          val us = new User(newUser, {
-            if (existingUsers.records.values.size > 0) existingUsers.records.values.last.asInstanceOf[User].getUserId + 1 else 0
-          }, new Date(), List())
-          StorageManager.addObjectToFile(us, databasePath)
-          mainLoopUserMenu(user, databasePath)
+          addUser(newUser)(databasePath)
         }
 
         case "3" => {
           val className = "User"
           val existingUsers = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
           val savedUsers = existingUsers.getTableByName(className).records.values.asInstanceOf[Iterable[User]]
-
-
           savedUsers map (x => println(x))
+
           println("Insert ID of User to delete: ")
           val userId = readLine().trim.toInt
-          val usersToMaintain = savedUsers filter (x => x.getUserId != userId)
+          val usersToMaintain = savedUsers filter (x => !customFilter(x.getUserId.toString, userId.toString)) //Higher Order Application to filtering via ID
           StorageManager.writeObjectListInFile(usersToMaintain.toList.asInstanceOf[List[User]], databasePath, className)
           mainLoopUserMenu(user, databasePath)
+        }
+        case "4" => {
+          val savedDatabase = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
+          val savedUsers = savedDatabase.getTableByName("User").records.values.asInstanceOf[Iterable[User]]
+          println("Insert ID of Project to Associate With")
+          val savedProjects = savedDatabase.getTableByName("Project").records.values.asInstanceOf[Iterable[Project]]
+          if (savedProjects.size != 0) {
+            savedProjects.map(x => println("Project: " + x.getProjectId + " " + x.getProjectName))
+            val projectID = readLine().trim
+            projectID match {
+              case "q" | "Q" => mainLoopUserMenu(user, databasePath)
+              case _ => {
+                if (Try(projectID.toInt).isSuccess) {
+                  val project = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database].getTableByName("Project").records.asInstanceOf[Map[Int, Project]].values.find(x => x.id == projectID.toInt).get
+                  val dupe = user.getParticipatingProjects map (x => projectID != x)
+                  if( dupe.contains(false)){ println("The User is already associated with said Project.") } else {
+                    val updatedUser = User.addParticipatingProject(user, project.getProjectId)
+                    val usersToMaintain = savedUsers filter (x => !customFilter(x.getUserId.toString, user.getUserId.toString)) //Higher Order Application to filtering via ID
+                    StorageManager.writeObjectListInFile(usersToMaintain.toList.asInstanceOf[List[User]] ++ List(updatedUser), databasePath, "User")
+                  }
+                } else {
+                  println("Not a valid file Id!")
+                  mainLoopUserMenu(user, databasePath)
+                }
+              }
+            }
+          }
+        }
+        case "5" => {
+
         }
         case _ => {
           println("Invalid choice!")
@@ -139,7 +194,7 @@ object Main {
       println("1. Check uploaded tasks")
       println("2. Upload new Task")
       println("3. Discard Task")
-      println("0. Go Back")
+      println("0. Exit program")
       val userChoice = readLine.trim
       userChoice match {
         case "0" => println("Exiting...")
@@ -166,20 +221,20 @@ object Main {
           mainLoopTaskMenu(user, databasePath)
         }
         case "3" => {
-           val className = "Task"
-           val existingProjects = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
-           val savedTasks = existingProjects.getTableByName(className).records.values.asInstanceOf[Iterable[Task]]
+          val className = "Task"
+          val existingProjects = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
+          val savedTasks = existingProjects.getTableByName(className).records.values.asInstanceOf[Iterable[Task]]
 
-           savedTasks.map(x => println("Task: " + x.getId + " " + x.getName))
-           println("Insert Task ID To Delete: ")
-           val taskId = readLine().trim.toInt
-           val newExistingTasks = savedTasks filter (x => x.getId != taskId)
-           try {
-              StorageManager.writeObjectListInFile(newExistingTasks.toList, databasePath, className)
-           } catch {
-              case e: NoSuchElementException => println("There are no tasks to delete")
-           }
-           mainLoopTaskMenu(user, databasePath)
+          savedTasks.map(x => println("Task: " + x.getId + " " + x.getName))
+          println("Insert Task ID To Delete: ")
+          val taskId = readLine().trim.toInt
+          val newExistingTasks = savedTasks filter (x => customFilter(x.getId.toString, taskId.toString)) //Another application of higher order function
+          try {
+            StorageManager.writeObjectListInFile(newExistingTasks.toList, databasePath, className)
+          } catch {
+            case e: NoSuchElementException => println("There are no tasks to delete")
+          }
+          mainLoopTaskMenu(user, databasePath)
         }
         case _ => {
           println("Invalid choice!")
@@ -226,7 +281,7 @@ object Main {
           savedProjects map (x => println(x))
           println("Insert Project ID To Delete: ")
           val projectId = readLine().trim.toInt
-          val newExistingProjects = savedProjects filter (x => x.getProjectId != projectId)
+          val newExistingProjects = savedProjects filter (x => customFilter(x.getProjectId.toString, projectId.toString)) //Higher Order Function application
           try {
             StorageManager.writeObjectListInFile(newExistingProjects.toList, databasePath, className)
           } catch {
@@ -298,7 +353,7 @@ object Main {
           savedFiles.map(x => println("File: " + x.getId + " " + x.getName))
           println("Insert ID of file to delete: ")
           val fileId = readLine().trim.toInt
-          val newFileList = savedFiles.filter(x => x.getId() != fileId)
+          val newFileList = savedFiles.filter(x => customFilter(x.getId().toString, fileId.toString)) //higher order function application
           StorageManager.writeObjectListInFile(newFileList.toList, databasePath, className)
           mainLoopFileMenu(user, databasePath)
         }

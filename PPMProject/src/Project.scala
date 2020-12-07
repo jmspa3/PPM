@@ -32,6 +32,11 @@ object Project {
   type date_creation = Date
 
 
+  def addMember(p: Project, u: User) = {
+    //before calling save project to be deleted to val, then call using such val, using returned, save to DB
+    Project(p.getOwner, p.getProjectName, p.getProjectDescription, p.getProjectId, p.getListMembers:+u, p.getListFiles, p.getListTasks, p.getCreationDate)
+  }
+
   def getOwner(p: Project): User = {
     p.owner
   }
@@ -65,7 +70,7 @@ object Project {
   }
 
   def toString(p: Project): String = {
-    "ID: " + p.id + "\nName: " + p.name + "\nDescription: " + p.description + "\nOwned By: " + p.owner.getUsername + "; " + p.owner.getUserId + "\nCreated On: " + p.date_creation + "\n"
+    "ID: " + p.id + "\nName: " + p.name + "\nDescription: " + p.description + "\nOwned By: " + p.owner.getUsername + "; " + p.owner.getUserId + "\nCreated On: " + p.date_creation + "\nList of Members: " + p.getListMembers.toString + "\n \n"
   }
 
 }
