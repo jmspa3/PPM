@@ -6,9 +6,9 @@ import java.util.Date
 //VER MESSAGE DIGEST PARA ENCRIPTAÇÃO DE PASSWORDS
 
 
-case class User(name: String = "guest", id: Int = 0, creation_date: Date = new Date(), participating_projects: List[Project] = List()) extends Serializable {
+case class User(name: String = "guest", id: Int = 0, creation_date: Date = new Date(), participating_projects: List[Project] = List()) extends SavedClass {
   def getUsername: String = User.getUsername(this)
-  def getUserId: Int = User.getUserId(this)
+  def getId: Int = User.getId(this)
   def getCreationDate: Date = User.getCreationDate(this)
   def getParticipatingProjects: List[Project] = User.getParticipatingProjects(this)
   def setParticipatingProjects(): User = User.setParticipatingProjects(this)
@@ -27,7 +27,7 @@ object User {
     u.name
   }
 
-  def getUserId(u: User): Int = {
+  def getId(u: User): Int = {
     u.id
   }
 
