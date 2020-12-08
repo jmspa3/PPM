@@ -4,12 +4,12 @@ import java.util.Date
 
 
 
-case class Project(owner: User, name: String, description: String, id: Int, list_members: List[User], list_files: List[SharedFile], list_tasks: List[Task], date_creation: Date) extends Serializable {
+case class Project(owner: User, name: String, description: String, id: Int, list_members: List[User], list_files: List[SharedFile], list_tasks: List[Task], date_creation: Date) extends SavedClass {
 
   def getOwner: User = Project.getOwner(this)
   def getProjectName: String = Project.getProjectName(this)
   def getProjectDescription: String = Project.getProjectDescription(this)
-  def getProjectId: Int = Project.getProjectId(this)
+  def getId: Int = Project.getId(this)
   def getListMembers: List[User] = Project.getListMembers(this)
   def getListFiles: List[SharedFile] = Project.getListFiles(this)
   def getListTasks: List[Task] = Project.getListTasks(this)
@@ -44,7 +44,7 @@ object Project {
     p.description
   }
 
-  def getProjectId(p: Project): Int = {
+  def getId(p: Project): Int = {
     p.id
   }
 
@@ -65,7 +65,7 @@ object Project {
   }
 
   def toString(p: Project): String = {
-    "ID: " + p.id + "\nName: " + p.name + "\nDescription: " + p.description + "\nOwned By: " + p.owner.getUsername + "; " + p.owner.getUserId + "\nCreated On: " + p.date_creation + "\n"
+    "ID: " + p.id + "\nName: " + p.name + "\nDescription: " + p.description + "\nOwned By: " + p.owner.getUsername + "; " + p.owner.getId + "\nCreated On: " + p.date_creation + "\n"
   }
 
 }

@@ -4,7 +4,7 @@ import java.time._
 
 
 
-case class Task(id: Int, name : String, creationDate: LocalDate, done : Boolean ,priority: String) extends Serializable {
+case class Task(id: Int, name : String, creationDate: LocalDate, done : Boolean ,priority: String) extends SavedClass {
   def daysLeft(): Unit = Task.daysLeft(this)
   def setDone(): Task = Task.setDone(this)
   def isDone(): Boolean = Task.isDone(this)

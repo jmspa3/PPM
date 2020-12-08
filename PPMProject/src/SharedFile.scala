@@ -1,11 +1,11 @@
 package PPMProject
 
 import java.io.Serializable
-import com.github.nscala_time.time.Imports.DateTime
+import java.time._
 
-case class Comment(user: User, date: DateTime, content: String)
+case class Comment(user: User, date: LocalDate, content: String)
 
-case class SharedFile(fileName: String, id: Int, path: String, comments: List[Comment]) extends Serializable{
+case class SharedFile(fileName: String, id: Int, path: String, comments: List[Comment]) extends SavedClass {
   def getName() = SharedFile.getName(this)
   def getId() = SharedFile.getId(this)
   def getPath() = SharedFile.getPath(this)
