@@ -1,55 +1,49 @@
 package PPMProject
 
-import java.io.Serializable
-import java.util.Date
+import java.time._
 
 //VER MESSAGE DIGEST PARA ENCRIPTAÇÃO DE PASSWORDS
 
+case class User(id: Int = 0, name: String = "guest", creationDate: LocalDate = LocalDate.now()) extends SavedClass {
 
-case class User(name: String = "guest", id: Int = 0, creation_date: Date = new Date(), participating_projects: List[Project] = List()) extends SavedClass {
-  def getUsername: String = User.getUsername(this)
-  def getId: Int = User.getId(this)
-  def getCreationDate: Date = User.getCreationDate(this)
-  def getParticipatingProjects: List[Project] = User.getParticipatingProjects(this)
-  def setParticipatingProjects(): User = User.setParticipatingProjects(this)
-  override def toString: String = User.toString(this)
+   def getUsername: String = User.getUsername(this)
+   def getId: Int = User.getId(this)
+   def getCreationDate: LocalDate = User.getCreationDate(this)
+   def getParticipatingProjects(database: Database): List[Project] = User.getParticipatingProjects(this, database)
+   def customToString(database: Database): String = User.customToString(this, database)
 
 }
 
 object User {
 
-  type name = String
-  type id = Int
-  type creation_date = Date
-  type participating_projects = List[Project]
+   type id = Int
+   type name = String
+   type creationDate = LocalDate
 
-  def getUsername(u: User): String = {
-    u.name
-  }
+   def getUsername(u: User): String = {
+      u.name
+   }
 
-  def getId(u: User): Int = {
-    u.id
-  }
+   def getId(u: User): Int = {
+      u.id
+   }
 
-  def getCreationDate(u: User): Date ={
-    u.creation_date
-  }
+   def getCreationDate(u: User): LocalDate ={
+      u.creationDate
+   }
 
-  def getParticipatingProjects(u: User): List[Project] = {
-    u.participating_projects
-  }
-
-  def setParticipatingProjects(u: User): User = {
-    User(u.name, u.id, u.creation_date, List())
-  }
+   def getParticipatingProjects(u: User, db: Database): List[Project] = {
+      val projects = db.getTableByName("Project").records.values.toList.asInstanceOf[List[Project]]
+      projects.filter(x => x.memberIds.contains(u.id) || (x.ownerId equals u.id))
+   }
 
 
-  def toString(u: User) : String = {
+   def customToString(u: User, db: Database) : String = {
 
-    "Name : " + u.name +
-      "\nID = " + u.id + "\nCreated On : " + u.creation_date +
-      "\nParticipating Projects : " + u.participating_projects + "\n"
-  }
+      "Name : " + u.name +
+         "\nID = " + u.id + "\nCreated On : " + u.creationDate +
+         "\nParticipating Projects : " + User.getParticipatingProjects(u, db) + "\n"
+   }
 
 }
 
