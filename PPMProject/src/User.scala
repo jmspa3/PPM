@@ -3,17 +3,15 @@ package PPMProject
 import java.io.Serializable
 import java.util.Date
 
-import scala.annotation.tailrec
-
 //VER MESSAGE DIGEST PARA ENCRIPTAÇÃO DE PASSWORDS
 
 
-case class User(name: String = "guest", id: Int = 0, creation_date: Date = new Date(), participating_projects: List[Int] = List()) extends Serializable {
+case class User(name: String = "guest", id: Int = 0, creation_date: Date = new Date(), participating_projects: List[Project] = List()) extends SavedClass {
   def getUsername: String = User.getUsername(this)
-  def getUserId: Int = User.getUserId(this)
+  def getId: Int = User.getId(this)
   def getCreationDate: Date = User.getCreationDate(this)
-  def getParticipatingProjects: List[Int] = User.getParticipatingProjects(this)
-  def setParticipatingProjects(p: Int): User = User.addParticipatingProject(this, p)
+  def getParticipatingProjects: List[Project] = User.getParticipatingProjects(this)
+  def setParticipatingProjects(): User = User.setParticipatingProjects(this)
   override def toString: String = User.toString(this)
 
 }
@@ -23,13 +21,13 @@ object User {
   type name = String
   type id = Int
   type creation_date = Date
-  type participating_projects = List[Int]
+  type participating_projects = List[Project]
 
   def getUsername(u: User): String = {
     u.name
   }
 
-  def getUserId(u: User): Int = {
+  def getId(u: User): Int = {
     u.id
   }
 
@@ -37,25 +35,12 @@ object User {
     u.creation_date
   }
 
-  def getParticipatingProjects(u: User): List[Int] = {
+  def getParticipatingProjects(u: User): List[Project] = {
     u.participating_projects
   }
 
-  def addParticipatingProject(u: User, p: Int): User = {
-    val listToBeAdded = getParticipatingProjects(u)
-    User(u.name, u.id, u.creation_date, listToBeAdded ++ List(p))
-  }
-
-  //A SER FEITO QUANDO FOR CARREGADO PARA A MEM O FICHEIRO DA BD POR ISSO ISTO PODE SER ELIMINADO
-  def removeParticipatingProjects(u: User, p: Project): User = {
-    @tailrec
-    def loop(acc: List[Int], userProjects: List[Int], projectID: Int): List[Int] = userProjects match {
-      case Nil => acc
-      case a => if (userProjects.head != projectID) loop(acc:+userProjects.head, userProjects.tail, projectID) else acc
-    }
-    val updatedProjects = loop(List(), getParticipatingProjects(u), Project.getProjectId(p))
-    User(getUsername(u), getUserId(u), getCreationDate(u), updatedProjects)
-
+  def setParticipatingProjects(u: User): User = {
+    User(u.name, u.id, u.creation_date, List())
   }
 
 

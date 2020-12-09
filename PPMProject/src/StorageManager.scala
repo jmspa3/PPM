@@ -4,7 +4,7 @@ import java.io._
 
 object StorageManager {
 
-  def writeObjectListInFile(objectList: List[Serializable], pathToFile: String, className: String): Unit = {
+  def writeObjectListInFile(objectList: List[SavedClass], pathToFile: String, className: String): Unit = {
     val savedDatabase = readDatabaseFile(pathToFile).asInstanceOf[Database]
     //val className = objectList.head.getClass.getName.split('.').last
     var out = None: Option[ObjectOutputStream]
@@ -18,7 +18,7 @@ object StorageManager {
     }
   }
 
-  def addObjectToFile(dataToWrite: Serializable, pathToFile: String) {
+  def addObjectToFile(dataToWrite: SavedClass, pathToFile: String) {
     val savedDatabase = readDatabaseFile(pathToFile).asInstanceOf[Database]
     var out = None: Option[ObjectOutputStream]
     try {
@@ -31,6 +31,17 @@ object StorageManager {
     }
   }
 
+  def saveDatabase(database: Database, pathToFile: String) {
+    var out = None: Option[ObjectOutputStream]
+    try {
+      out = Some(new ObjectOutputStream(new FileOutputStream(pathToFile)))
+      out.get.writeObject(database)
+    } catch {
+      case e: IOException => e.printStackTrace()
+    } finally {
+      if (out.isDefined) out.get.close()
+    }
+  }
 
   def readDatabaseFile(pathToFile: String): Any = {
     var in = None: Option[ObjectInputStream]
