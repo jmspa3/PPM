@@ -29,7 +29,6 @@ class MenuController {
 
 
   def onButton1Clicked(): Unit = {
-    
     vbox.getChildren.addAll(new HBox(new Label("Task1"), new Button("Delete")))
   }
 
