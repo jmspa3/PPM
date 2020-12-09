@@ -1,10 +1,8 @@
 package PPMProject
 
-import java.io.Serializable
 import java.time._
 
 //VER MESSAGE DIGEST PARA ENCRIPTAÇÃO DE PASSWORDS
-
 
 case class User(id: Int = 0, name: String = "guest", creationDate: LocalDate = LocalDate.now()) extends SavedClass {
 

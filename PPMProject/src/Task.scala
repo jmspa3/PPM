@@ -30,6 +30,7 @@ case class Task(id: Int, ownerId: Int, projectId: Int, creationDate: LocalDate =
    def getMemberIds(): List[Int] = Task.getMemberIds(this)
    def getMembers(database: Database): List[User] = Task.getMembers(this, database)
    def addMember(newMember: User): Task = Task.addMember(this, newMember)
+   def getMembersAsString(database: Database): String = Task.getMembersAsString(this, database)
    def getFileIds(): List[Int] = Task.getFileIds(this)
    def getFiles(database: Database): List[SharedFile] = Task.getFiles(this, database)
    def addFile(newFile: SharedFile): Task = Task.addFile(this, newFile)
@@ -111,6 +112,10 @@ object Task{
    def getMembers(t: Task, db: Database): List[User] =
    {
       db.getTableByName("User").getFromIdList(t.memberIds).asInstanceOf[List[User]]
+   }
+
+   def getMembersAsString(t: Task, db: Database): String = {
+      Task.getMembers(t, db).foldRight("")(_.getUsername + ", " + _).trim.dropRight(1)
    }
 
    def setPriority(t: Task, priority: Priority): Task =

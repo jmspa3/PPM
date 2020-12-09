@@ -26,7 +26,7 @@ object Table {
 
    }
 
-   def createTableLoop(map: Map[Int, SavedClass], l: List[SavedClass], tableName: String): Table = l match {
+   @tailrec def createTableLoop(map: Map[Int, SavedClass], l: List[SavedClass], tableName: String): Table = l match {
       case Nil => Table(map, tableName)
       case h::t =>
       {

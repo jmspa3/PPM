@@ -1,6 +1,5 @@
 package PPMProject
 
-import java.io.Serializable
 import java.time._
 
 case class SharedFile(id: Int, ownerId: Int, projectId: Int, creationDate: LocalDate = LocalDate.now(), fileName: String, path: String, commentIds: List[Int] = List()) extends SavedClass {

@@ -139,9 +139,12 @@ object Main {
 
       def mainLoopTaskMenu(user: User, projectEntry: (Int, Project), database: Database): Any = {
          println("Task Menu:\n")
-         println("1. Check uploaded tasks")
+         println("1. Check tasks")
          println("2. Upload new Task")
          println("3. Discard Task")
+         println("4. Check High priority tasks")
+         println("5. Check Medium priority tasks")
+         println("6. Check Low priority tasks")
          println("0. Go Back")
          val userChoice = readLine.trim
          userChoice match {
@@ -151,9 +154,9 @@ object Main {
                inspectProjectMenu(user, projectEntry._1, database)
             }
             case "1" => {
-               val savedFiles = database.getTableByName("Task").records.values.asInstanceOf[Iterable[Task]]
-               if (savedFiles.size != 0) {
-                  savedFiles.map(x => println("Task: " + x.getId + " " + x.getName))
+               val savedTasks = projectEntry._2.getTasks(database)
+               if (savedTasks.size != 0) {
+                  savedTasks.map(x => println("Task: " + x.getId + " " + x.getName))
                }
                else {
                   println("There are no tasks at the moment!")
@@ -174,9 +177,9 @@ object Main {
                   if (savedTasks.records.values.size > 0) savedTasks.records.values.last.asInstanceOf[Task].getId() + 1 else 0
                }, user.getId, projectEntry._2.getId, deadline = deadline, name = newTaskName, priority = {
                   priority match {
-                     case _ => LowPriority;
                      case "2" => MediumPriority;
                      case "3" => HighPriority;
+                     case _ => LowPriority;
                   }
                })
                val newProject = projectEntry._2.addTask(t)
@@ -192,10 +195,40 @@ object Main {
                println("Insert Task ID To Delete: ")
                val taskId = readLine().trim.toInt
                val tasksToMaintain = savedTasks.filterTable(taskId)
-               val newProject = projectEntry._2.removeFile(taskId)
+               val newProject = projectEntry._2.removeTask(taskId)
                val tempDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
                val newDatabase = tempDatabase.swapTable("Task", tasksToMaintain)
                mainLoopTaskMenu(user,(projectEntry._1, newProject) ,newDatabase)
+            }
+            case "4" => {
+               val savedTasks = projectEntry._2.getHighPriorityTasks(database)
+               if (savedTasks.size != 0) {
+                  savedTasks.map(x => println("Task: " + x.getId + " " + x.getName))
+               }
+               else {
+                  println("There are no high priority tasks at the moment!")
+               }
+               mainLoopTaskMenu(user, projectEntry,database)
+            }
+            case "5" => {
+               val savedTasks = projectEntry._2.getMediumPriorityTasks(database)
+               if (savedTasks.size != 0) {
+                  savedTasks.map(x => println("Task: " + x.getId + " " + x.getName))
+               }
+               else {
+                  println("There are no medium priority tasks at the moment!")
+               }
+               mainLoopTaskMenu(user, projectEntry,database)
+            }
+            case "6" => {
+               val savedTasks = projectEntry._2.getLowPriorityTasks(database)
+               if (savedTasks.size != 0) {
+                  savedTasks.map(x => println("Task: " + x.getId + " " + x.getName))
+               }
+               else {
+                  println("There are no low priority tasks at the moment!")
+               }
+               mainLoopTaskMenu(user, projectEntry,database)
             }
             case _ => {
                println("Invalid choice!")
