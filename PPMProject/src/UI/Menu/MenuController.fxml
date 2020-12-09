@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="554.0" prefWidth="865.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Menu.MenuController">
+    <children>
+        <Label layoutX="76.0" layoutY="42.0" prefHeight="73.0" prefWidth="335.0" text="Os meus projetos">
+            <font>
+                <Font size="35.0" />
+            </font>
+        </Label>
+      <ListView fx:id="listView1" layoutX="76.0" layoutY="140.0" prefHeight="334.0" prefWidth="206.0" />
+      <Button fx:id="button1" layoutX="589.0" layoutY="157.0" mnemonicParsing="false" onMouseClicked="#onSelected" prefHeight="74.0" prefWidth="132.0" text="Button" />
+      <ScrollPane layoutX="311.0" layoutY="142.0" prefHeight="334.0" prefWidth="243.0">
+        <content>
+          <AnchorPane fx:id="scroll" minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="223.0" />
+        </content>
+      </ScrollPane>
+    </children>
+    <effect>
+        <DisplacementMap>
+            <mapData>
+                <FloatMap />
+            </mapData>
+        </DisplacementMap>
+    </effect>
+
+</AnchorPane>

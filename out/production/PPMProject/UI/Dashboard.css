@@ -1,0 +1,22 @@
+.newProject {
+    -fx-color:'green';
+    -fx-background-color:'white';
+    -fx-text-color:'green';
+    -fx-text-fill: 'black';
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.2) , 5, 0.0 , 0 , 1 );
+}
+
+.newProject: selected {
+    -fx-text-fill: black;
+    -fx-base: transparent;
+    -fx-background: black;
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.windows {
+    -fx-window-color:blue;
+    -fx-background-color:white;
+}
+

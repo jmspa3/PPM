@@ -8,6 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="scala-sdk-2.13.3" level="application" />
-    <orderEntry type="library" name="com.github.nscala-time:nscala-time_2.13:2.24.01" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
