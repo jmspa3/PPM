@@ -190,7 +190,6 @@ object Main {
             case "3" => {
                val className = "Task"
                val savedTasks = database.getTableByName(className)
-
                savedTasks.records.values.asInstanceOf[Iterable[Task]].map(x => println("Task: " + x.getId + " " + x.getName))
                println("Insert Task ID To Delete: ")
                val taskId = readLine().trim.toInt
