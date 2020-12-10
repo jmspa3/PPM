@@ -27,7 +27,9 @@ object Task{
   type priority = String
   type Members = List[User]
 
-  // 2: get a date to represent Christmas
+  // FALTA
+  //lista membros, sharedfiles
+  //adicionar/remover membros e sharedfiles associados
 
   def editName(t:Task)(newName:String): Task  = {
     Task(t.id,newName,t.creationDate,t.done,t.priority)

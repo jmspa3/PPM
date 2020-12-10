@@ -1,19 +1,22 @@
 package PPMProject
-import java.util.Date
 import java.time._
+import java.util.Date
+
+import scala.annotation.tailrec
 import scala.io.StdIn.readLine
 import scala.util.Try
-import java.time._
 
 object Main {
 
    val databasePath = "savedFiles"
 
+
    def main(args: Array[String]): Unit = {
       println("Welcome to PPMProject. Insert your Username: ")
       val username = readLine().trim
-      //procurar na BD o user com o nome fornecido
       val database = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
+      //procurar na BD o user com o nome fornecido
+
       val userList = database.getTableByName("User").records.values.asInstanceOf[Iterable[User]].toList
       try {
          val userlist = userList filter (x => x.getUsername == username)
@@ -27,6 +30,24 @@ object Main {
       }
 
    }
+
+   //Add ID for newly created object
+   def customFoldLeft(lastResult: Int)(list: List[SavedClass])(f: (Int, Int) => Int): Int = list match {
+      case Nil => lastResult
+      case x :: xs => {
+         try {
+            if (xs.head.getId - x.getId == 0) {
+               val result = f(lastResult, 1)
+               customFoldLeft(result)(xs)(f)
+            } else {
+               f(lastResult, 1)
+            }
+         } catch {
+            case e: NoSuchElementException => 0
+         }
+      }
+   }
+
 
    def createUser(existingUsers: List[User], database: Database): (User, Database) = {
       println("We couldn't find you on the User Database. Please select one of the options: ")
@@ -49,16 +70,39 @@ object Main {
 
    }
 
+   //To be used in Higher Order Function, mapping
+   def customFilter(s1: String, s2: String): Boolean = {
+      s1 == s2
+   }
+
+   //Tailrec for Object ID
+   def customFilter1(lstToFilter: List[Any], filter: List[Any]): List[Any] = {
+      @tailrec
+      def loop1(acc: List[Any], lst: List[Any], fil: List[Any]): List[Any] = lst match {
+         case Nil => acc
+         case x => if (fil.contains(lst.head)) loop1(acc:+lst.head, lst.tail, fil) else loop1(acc, lst.tail, fil)
+      }
+      loop1(List(), lstToFilter, filter)
+   }
+
 
    //Exemplo de Currying, addUser com 2 args e addUser2 que vem com o 2º arg predefinido. Útil para adicionar o utilizador no login (removido devido á nova implementação de database como objeto)
    def addUser(newUser: String)(database: Database): (User, Database) = {
       val existingUsers = database.getTableByName("User")
       val us = new User(newUser, {
-         if (existingUsers.records.values.size > 0) existingUsers.records.values.last.asInstanceOf[User].getId + 1 else 0
+         if (existingUsers.records.values.size > 0)
+            //existingUsers.records.values.last.asInstanceOf[User].getId + 1
+            customFoldLeft(0)(existingUsers.records.values.asInstanceOf[Iterable[Task]].toList)(_ + _) + 1
+
+         else 0
       }, new Date(), List())
       val newDatabase = database.insertInTable(us, "User") //TODO change depending on professor's answer
       (us, newDatabase)
    }
+
+   //A ser usado no login
+   //def addUser2 = addUser(_: String)(a: String): (User, Database)
+
 
 
    def mainMenu(user: User, database: Database) {
@@ -71,7 +115,10 @@ object Main {
       println("0. Exit program")
       val userChoice = readLine.trim
       userChoice match {
-         case "0" => println("Exiting...")
+         case "0" =>
+            println("Exiting...")
+            sys.exit(0)
+
          case "1" => {
             sharedFileMenu(user, database)
             mainMenu(user, database)
@@ -111,6 +158,8 @@ object Main {
          println("1. Check Users")
          println("2. Create New User")
          println("3. Delete User")
+         println("4. Associate with Project")
+         println("5. De-Associate with Project")
          println("0. Go Back")
          val userChoice = readLine.trim
          userChoice match {
@@ -136,11 +185,72 @@ object Main {
                val newDatabase = database.swapTable( "User", usersToMaintain)
                mainLoopUserMenu(user, newDatabase)
             }
+            case "4" => {
+               val savedUsers = database.getTableByName("User")
+
+               println("Insert ID of Project to Associate With")
+               val savedProjects = database.getTableByName("Project").records.values.asInstanceOf[Iterable[Project]]
+               if (savedProjects.size != 0) {
+                  savedProjects.map(x => println("Project: " + x.getId + " " + x.getProjectName))
+                  val projectID = readLine().trim
+                  projectID match {
+                     case "q" | "Q" => mainLoopUserMenu(user, database)
+                     case _ => {
+                        if (Try(projectID.toInt).isSuccess) {
+                           val project = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].values.find(x => x.id == projectID.toInt).get
+                           val dupe = user.getParticipatingProjects map (x => projectID != x)
+                           if( dupe.contains(false)){ println("The User is already associated with said Project.") } else {
+                              val userEntry = database.getTableByName("User").records.asInstanceOf[Map[Int, User]].find(x => x._2.id == user.getId).get
+
+                              val updatedUser = User.addParticipatingProject(user, project.getId)
+                              val className = "User"
+                              val newDatabase = database.swapTable(className, new Table(savedUsers.records - userEntry._1 + (userEntry._1 -> updatedUser), className))
+                              //val usersToMaintain = savedUsers.records.asInstanceOf[Iterable[User]].toList filter (x => !customFilter(x.getId.toString, user.getId.toString)) //Higher Order Application to filtering via ID
+                              //dStorageManager.writeObjectListInFile(usersToMaintain.toList.asInstanceOf[List[User]] ++ List(updatedUser), databasePath, "User")
+                              mainLoopUserMenu(updatedUser, newDatabase)
+                           }
+                        } else {
+                           println("Not a valid Project Id!")
+                           mainLoopUserMenu(user, database)
+                        }
+                     }
+                  }
+               }
+            }
+            case "5" => {
+               val savedUsers = database.getTableByName("User")
+               println("Insert ID of Project to De-Associate With")
+               val savedProjects = database.getTableByName("Project").records.values.asInstanceOf[Iterable[Project]]
+               if (savedProjects.size != 0) {
+                  savedProjects.map(x => println("Project: " + x.getId + " " + x.getProjectName))
+                  val projectID = readLine().trim
+                  projectID match {
+                     case "q" | "Q" => mainLoopUserMenu(user, database)
+                     case _ => {
+                        if (Try(projectID.toInt).isSuccess) {
+                           val project = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].values.find(x => x.id == projectID.toInt).get
+                           val userEntry = database.getTableByName("User").records.asInstanceOf[Map[Int, User]].find(x => x._2.id == user.getId).get
+                           val updatedUser = User.removeParticipatingProjects(user, project)
+                           val className = "User"
+                           val newDatabase = database.swapTable(className, new Table(savedUsers.records - userEntry._1 + (userEntry._1 -> updatedUser), className))
+                           mainLoopUserMenu(updatedUser, newDatabase)
+                           //val usersToMaintain = savedUsers.toList filter (x => !customFilter(x.getId.toString, user.getId.toString)) //Higher Order Application to filtering via ID
+                           //StorageManager.writeObjectListInFile(usersToMaintain.toList.asInstanceOf[List[User]] ++ List(updatedUser), databasePath, "User")
+                        } else {
+                           println("Not a valid file Id!")
+                           mainLoopUserMenu(user, database)
+                        }
+                     }
+                  }
+               }
+
+            }
             case _ => {
                println("Invalid choice!")
                mainLoopUserMenu(user, database)
             }
          }
+         mainMenu(user, database)
       }
    }
    def taskMenu(user: User, database: Database) = {
@@ -155,7 +265,9 @@ object Main {
          println("0. Go Back")
          val userChoice = readLine.trim
          userChoice match {
-            case "0" => println("Exiting...")
+            case "0" =>
+               println("Exiting...")
+               sys.exit(0)
             case "1" => {
                val savedFiles = database.getTableByName("Task").records.values.asInstanceOf[Iterable[Task]]
                if (savedFiles.size != 0) {
@@ -171,7 +283,10 @@ object Main {
                val newTaskName = readLine()
                val savedTasks = database.getTableByName("Task")
                val sh = new Task({
-                  if (savedTasks.records.values.size > 0) savedTasks.records.values.last.asInstanceOf[Task].getId() + 1 else 0
+                  if (savedTasks.records.values.size > 0)
+                     //savedTasks.records.values.last.asInstanceOf[Task].getId() + 1
+                     customFoldLeft(0)(savedTasks.records.values.asInstanceOf[Iterable[Task]].toList)(_ + _) + 1
+                  else 0
                },newTaskName, LocalDate.now(),false,"High")
                val newDatabase = database.insertInTable(sh, "Task")
                mainLoopTaskMenu(user, newDatabase)
@@ -187,6 +302,8 @@ object Main {
                val newDatabase = database.swapTable("Task", tasksToMaintain)
                mainLoopTaskMenu(user, newDatabase)
             }
+               //case 4 -> print "add which task to user" -> select task -> return updated db and user
+               //case 5 -> same logic to de-associate associated task
             case _ => {
                println("Invalid choice!")
                mainLoopTaskMenu(user, database)
@@ -219,7 +336,11 @@ object Main {
                val description = readLine().trim
                val existingProjects = database.getTableByName("Project")
                val pr = new Project(user, newProjectName, description, {
-                  if (existingProjects.records.values.size > 0) existingProjects.records.values.last.asInstanceOf[Project].getId + 1 else 0
+                  if (existingProjects.records.values.size > 0)
+                     //existingProjects.records.values.last.asInstanceOf[Project].getId + 1
+                     customFoldLeft(0)(existingProjects.records.values.asInstanceOf[Iterable[Project]].toList)(_ + _) + 1
+
+                  else 0
                }, List(), List(), List(), new Date())
                val newDatabase = database.insertInTable(pr, "Project")
                mainLoopProjectMenu(user, newDatabase)
@@ -284,7 +405,11 @@ object Main {
                val newFileName = newFilePath.split("/").last
                val savedFiles = database.getTableByName("SharedFile")
                val sh = new SharedFile(newFileName, {
-                  if (savedFiles.records.values.size > 0) savedFiles.records.values.last.asInstanceOf[SharedFile].getId() + 1 else 0
+                  if (savedFiles.records.values.size > 0)
+                     //savedFiles.records.values.last.asInstanceOf[SharedFile].getId() + 1
+                     customFoldLeft(0)(savedFiles.records.values.asInstanceOf[Iterable[SharedFile]].toList)(_ + _) + 1
+
+                  else 0
                }, newFilePath, List())
                val newDatabase = database.insertInTable(sh, "SharedFile")
                mainLoopFileMenu(user, newDatabase)
