@@ -1,6 +1,5 @@
 package UI
 
-
 import java.time.LocalDate
 
 import javafx.application.Application
