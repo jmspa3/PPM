@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1028.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.SharedFile.SharedFileController">
+    <children>
+        <Label alignment="CENTER" layoutX="654.0" layoutY="143.0" prefHeight="73.0" prefWidth="237.0" text="Comments">
+            <font>
+                <Font size="35.0" />
+            </font>
+        </Label>
+        <Label fx:id="fileNameLabel" layoutX="137.0" layoutY="55.0" prefHeight="73.0" prefWidth="302.0" text="FileName">
+            <font>
+                <Font size="35.0" />
+            </font>
+        </Label>
+        <Button fx:id="newCommentButton" layoutX="137.0" layoutY="631.0" mnemonicParsing="false" onMouseClicked="#newComment" prefHeight="25.0" prefWidth="754.0" text="Send Comment" />
+        <Label fx:id="creatorLabel" layoutX="140.0" layoutY="156.0" text="Uploaded by: ">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <Label fx:id="createdDateLabel" layoutX="140.0" layoutY="185.0" text="Uploaded in:">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+      <TextArea fx:id="commentTextArea" layoutX="137.0" layoutY="538.0" prefHeight="82.0" prefWidth="754.0" promptText="Write your comment..." />
+      <Label fx:id="filePathLabel" layoutX="140.0" layoutY="128.0" text="Full file path: ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <ListView fx:id="commentListView" layoutX="137.0" layoutY="222.0" prefHeight="310.0" prefWidth="754.0" />
+      <Button layoutX="131.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#backButtonClicked" prefHeight="25.0" prefWidth="78.0" text="Back" />
+    </children>
+    <effect>
+        <DisplacementMap>
+            <mapData>
+                <FloatMap />
+            </mapData>
+        </DisplacementMap>
+    </effect>
+
+</AnchorPane>

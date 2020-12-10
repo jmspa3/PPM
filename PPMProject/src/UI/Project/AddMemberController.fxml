@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Project.AddMemberController">
+    <children>
+        <Label layoutX="174.0" layoutY="93.0" text="Add a new member">
+            <font>
+                <Font size="32.0" />
+            </font>
+        </Label>
+        <TextField fx:id="usernameTextField" layoutX="89.0" layoutY="200.0" prefHeight="33.0" prefWidth="423.0" promptText="Username...">
+            <font>
+                <Font size="19.0" />
+            </font>
+        </TextField>
+        <Button fx:id="createProjectButton" layoutX="396.0" layoutY="325.0" mnemonicParsing="false" onMouseClicked="#addMemberClicked" prefHeight="25.0" prefWidth="112.0" text="Add member" />
+    </children>
+</AnchorPane>

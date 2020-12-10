@@ -24,13 +24,11 @@ class MenuController {
    @FXML
    private var textField2: TextField = _
    @FXML
-   private var scroll: ScrollPane= _
-   @FXML
-   private var listView1: ListView[HBox] = _
+   private var projectListView: ListView[HBox] = _
    @FXML
    private var usernameLabel: Label = _
-
-   var vbox = new VBox(8) // spacing = 8
+   @FXML
+   private var titleLabel: Label = _
    var int = 0
    var user: String = _
 
@@ -51,7 +49,7 @@ class MenuController {
    def deleteProject(btn:Button,event: MouseEvent): Unit = {
       var intTask = btn.getId
       print(intTask.toString)
-      vbox.getChildren.remove(btn.getParent)
+      projectListView.getItems.remove(btn.getParent)
    }
 
    def createProject(projectName: String, projectDescription: String): Unit = {
@@ -62,7 +60,7 @@ class MenuController {
       int = int + 1
       buttonD.setOnMouseClicked(event => deleteProject(buttonD, event))
       buttonV.setOnMouseClicked(event => openProject(buttonV, (projectName, projectDescription), event))
-      vbox.getChildren.addAll(new HBox(new Label(projectName), buttonD, buttonV))
+      projectListView.getItems.add(new HBox(new Label(projectName), buttonD, buttonV))
    }
 
    def setUser(username: String): Unit =
@@ -75,16 +73,11 @@ class MenuController {
       val fxmlLoader = new FXMLLoader(getClass.getResource("../Project/ProjectController.fxml"))
       val root = fxmlLoader.load.asInstanceOf[Region]
       fxmlLoader.getController[ProjectController].setData(projectInfo._1, projectInfo._2)
+      fxmlLoader.getController[ProjectController].setParentRoot(titleLabel.getScene.getRoot)
       btn.getScene.setRoot(root)
    }
 
    @FXML def initialize(): Unit = {
-      scroll.setContent(vbox)
-      val button = new Button("Delete")
-      button.setId(int.toString)
-      int = int + 1
-      button.setOnMouseClicked(event => deleteProject(button,event))
-      vbox.getChildren.addAll(new HBox(new Label("Projeto " + int.toString+ "                "), button))
 
    }
 
