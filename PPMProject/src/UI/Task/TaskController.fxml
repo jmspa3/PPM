@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1028.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Task.TaskController">
+   <children>
+      <TextArea fx:id="descriptionTextArea" editable="false" layoutX="96.0" layoutY="226.0" prefHeight="353.0" prefWidth="269.0" promptText="Description..." />
+      <Label fx:id="taskNameLabel" layoutX="97.0" layoutY="60.0" prefHeight="83.0" prefWidth="269.0" text="Task Name">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Label>
+      <ListView layoutX="710.0" layoutY="251.0" prefHeight="285.0" prefWidth="219.0" />
+      <Button layoutX="709.0" layoutY="547.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="219.0" text="Add member" />
+      <Label fx:id="priorityLabel" layoutX="98.0" layoutY="153.0" prefHeight="42.0" prefWidth="121.0" text="Priority">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="710.0" layoutY="219.0" prefHeight="26.0" prefWidth="219.0" text="Responsible members">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <ListView layoutX="425.0" layoutY="254.0" prefHeight="285.0" prefWidth="219.0" />
+      <Button layoutX="424.0" layoutY="550.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="219.0" text="Add File" />
+      <Label alignment="CENTER" layoutX="425.0" layoutY="224.0" prefHeight="19.0" prefWidth="219.0" text="Associated files">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Button fx:id="editTaskButton" layoutX="796.0" layoutY="83.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="121.0" text="Edit Task" />
+      <Label fx:id="deadlineLabel" layoutX="232.0" layoutY="161.0" text="Deadline">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="com.github.nscala-time:nscala-time_2.13:2.24.0" type="repository">
+  <library name="c" type="repository">
     <properties maven-id="com.github.nscala-time:nscala-time_2.13:2.24.0">
       <exclude>
         <dependency maven-id="com.github.nscala-time:nscala-time_2.13" />
