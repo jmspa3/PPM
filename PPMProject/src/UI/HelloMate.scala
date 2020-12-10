@@ -7,7 +7,7 @@ import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.{Parent, Scene}
 import javafx.stage.Stage
-import PPMProject.Task
+
 
 class HelloMate extends Application {
   override def start(primaryStage: Stage): Unit = {
@@ -21,7 +21,7 @@ class HelloMate extends Application {
   }
 }
 object FxApp {
-  var task: Task = Task(1,"Jose", LocalDate.now(),false,"High")
+  //ar task: Task = Task(1,"Jose", LocalDate.now(),false,"High")
 
   def main(args: Array[String]): Unit = {
     Application.launch(classOf[HelloMate], args: _*)

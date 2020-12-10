@@ -12,9 +12,8 @@
                 <Font size="35.0" />
             </font>
         </Label>
-      <Button fx:id="button1" layoutX="441.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#onButton1Clicked" prefHeight="74.0" prefWidth="132.0" text="Add Project" />
-      <ScrollPane fx:id="scroll" layoutX="76.0" layoutY="130.0" prefHeight="334.0" prefWidth="310.0" />
-      <Button layoutX="441.0" layoutY="240.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="132.0" text="Button" />
+      <Button fx:id="button1" layoutX="433.0" layoutY="153.0" mnemonicParsing="false" onMouseClicked="#onButton1Clicked" prefHeight="74.0" prefWidth="132.0" text="Button" />
+      <ScrollPane fx:id="scroll" layoutX="95.0" layoutY="126.0" prefHeight="362.0" prefWidth="252.0" />
     </children>
     <effect>
         <DisplacementMap>

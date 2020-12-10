@@ -18,8 +18,6 @@ class LoginController {
     val mainViewRoot: Parent = fxmlLoader.load()
     button1.getScene().setRoot(mainViewRoot)
 
-
-
   }
 
 
