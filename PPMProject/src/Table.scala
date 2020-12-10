@@ -6,7 +6,8 @@ case class Table(records : Map[Int, SavedClass], tableName : String) {
 
    def insert(entry: SavedClass): Table = Table.insert(this, entry)
    def filterTable(userId: Int): Table = Table.filterTable(this, userId)
-
+   def getFromIdList(idList: List[Int]): List[SavedClass] = Table.getFromIdList(this, idList)
+   def updateTable(oldEntry: (Int,SavedClass), newValue: SavedClass): Table = Table.updateTable(this, oldEntry, newValue)
 }
 
 
@@ -25,7 +26,7 @@ object Table {
 
    }
 
-   def createTableLoop(map: Map[Int, SavedClass], l: List[SavedClass], tableName: String): Table = l match {
+   @tailrec def createTableLoop(map: Map[Int, SavedClass], l: List[SavedClass], tableName: String): Table = l match {
       case Nil => Table(map, tableName)
       case h::t =>
       {
@@ -50,6 +51,18 @@ object Table {
             else getEntriesToRemove(original.tail, userId, toRemove)
          }
       }
+   }
+
+   def getFromIdList(table: Table, idList: List[Int]): List[SavedClass] =
+   {
+      table.records.values.filter(x => idList.contains(x.getId())).toList
+   }
+
+   def updateTable(t: Table, oldEntry: (Int, SavedClass), newValue: SavedClass): Table =
+   {
+      val temp = Table(t.records - oldEntry._1 + (oldEntry._1 -> newValue), t.tableName)
+      println(temp)
+      temp
    }
 
 }
