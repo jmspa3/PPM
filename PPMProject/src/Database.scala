@@ -1,5 +1,7 @@
 package PPMProject
 
+import scala.collection.immutable.ListMap
+
 case class Database(tables : List[Table]) {
 
   def insertInTable( objectToSave: SavedClass, tableName: String) = Database.insertInTable(this, objectToSave, tableName.split('.').last)
@@ -28,7 +30,7 @@ object Database{
   }
 
   def newDatabase() : Database = {
-    val tableslist = List(Table(Map(),"Project"),Table(Map(),"Task"),Table(Map(),"User"),Table(Map(),"SharedFile"), Table(Map(), "Comment"))
+    val tableslist = List(Table(ListMap(),"Project"),Table(ListMap(),"Task"),Table(ListMap(),"User"),Table(ListMap(),"SharedFile"), Table(ListMap(), "Comment"))
     new Database(tableslist)
   }
 

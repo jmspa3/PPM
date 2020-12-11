@@ -9,6 +9,7 @@ object Main {
 
    val databasePath = "savedDatabase.shdb"
 
+
    def main(args: Array[String]): Unit = {
       println("Welcome to PPMProject. Insert your Username: ")
       val username = readLine().trim

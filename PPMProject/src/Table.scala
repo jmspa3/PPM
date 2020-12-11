@@ -1,8 +1,9 @@
 package PPMProject
 
 import scala.annotation.tailrec
+import scala.collection.immutable.ListMap
 
-case class Table(records : Map[Int, SavedClass], tableName : String) {
+case class Table(records : ListMap[Int, SavedClass], tableName : String) {
 
    def insert(entry: SavedClass): Table = Table.insert(this, entry)
    def filterTable(id: Int): Table = Table.filterTable(this, id)
@@ -16,15 +17,15 @@ object Table {
 
    def insert(table: Table, entry: SavedClass): Table = {
       if (table.records.size != 0) Table(table.records + (table.records.last._1 + 1 -> entry), table.tableName)
-      else Table(Map(0 -> entry), table.tableName)
+      else Table(ListMap(0 -> entry), table.tableName)
    }
 
    def createTable(tableName: String, entryList: List[SavedClass]): Table = {
-      createTableLoop(Map(), entryList, tableName)
+      createTableLoop(ListMap(), entryList, tableName)
 
    }
 
-   @tailrec def createTableLoop(map: Map[Int, SavedClass], l: List[SavedClass], tableName: String): Table = l match {
+   @tailrec def createTableLoop(map: ListMap[Int, SavedClass], l: List[SavedClass], tableName: String): Table = l match {
       case Nil => Table(map, tableName)
       case h::t =>
       {
