@@ -28,7 +28,7 @@ object Database{
   }
 
   def newDatabase() : Database = {
-    val tableslist = List(Table(Map(),"Project"),Table(Map(),"Task"),Table(Map(),"User"),Table(Map(),"SharedFile"))
+    val tableslist = List(Table(Map(),"Project"),Table(Map(),"Task"),Table(Map(),"User"),Table(Map(),"SharedFile"), Table(Map(), "Comment"))
     new Database(tableslist)
   }
 

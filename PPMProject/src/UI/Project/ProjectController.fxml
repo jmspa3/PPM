@@ -5,31 +5,45 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="554.0" prefWidth="865.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Project.ProjectController">
+<AnchorPane prefHeight="700.0" prefWidth="1028.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Project.ProjectController">
     <children>
-        <Label layoutX="76.0" layoutY="42.0" prefHeight="73.0" prefWidth="335.0" text="Os meus projetos">
+        <Label alignment="CENTER" layoutX="455.0" layoutY="97.0" prefHeight="73.0" prefWidth="237.0" text="Files">
             <font>
                 <Font size="35.0" />
             </font>
         </Label>
-        <ScrollPane layoutX="76.0" layoutY="150.0" prefHeight="326.0" prefWidth="376.0">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="449.0" prefWidth="276.0">
-                    <children>
-                        <Button layoutX="26.0" layoutY="225.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="224.0" text="Button" />
-                        <Button layoutX="26.0" layoutY="116.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="224.0" text="Button" />
-                        <Button layoutX="26.0" layoutY="173.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="224.0" text="Button" />
-                        <Button layoutX="26.0" layoutY="14.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="224.0" text="Button" />
-                        <Button layoutX="26.0" layoutY="387.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="224.0" text="Button" />
-                        <Button layoutX="26.0" layoutY="275.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="224.0" text="Button" />
-                        <Button layoutX="26.0" layoutY="68.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="224.0" text="Button" />
-                        <Button layoutX="26.0" layoutY="337.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="224.0" text="Button" />
-                    </children>
-                </AnchorPane>
-            </content>
-        </ScrollPane>
-        <Button layoutX="513.0" layoutY="150.0" mnemonicParsing="false" onMouseClicked="#onSelected" prefHeight="67.0" prefWidth="154.0" text="Button" />
-        <Button layoutX="513.0" layoutY="240.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="154.0" text="Button" />
+        <Button fx:id="newFileButton" layoutX="455.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newFileModal" prefHeight="25.0" prefWidth="237.0" text="New File" />
+      <Label alignment="CENTER" layoutX="721.0" layoutY="97.0" prefHeight="73.0" prefWidth="237.0" text="Tasks">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Label>
+      <Label fx:id="projectNameLabel" layoutX="42.0" layoutY="53.0" prefHeight="73.0" prefWidth="302.0" text="ProjectName">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Label>
+      <ListView fx:id="memberListView" layoutX="44.0" layoutY="475.0" prefHeight="145.0" prefWidth="381.0" />
+      <Button fx:id="newMemberButton" layoutX="44.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newMemberModal" prefHeight="25.0" prefWidth="383.0" text="Add Member" />
+      <TextArea fx:id="projectDescriptionTextArea" editable="false" layoutX="43.0" layoutY="192.0" prefHeight="264.0" prefWidth="383.0" />
+      <Button fx:id="editProjectButton" layoutX="345.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#editProjectModal" prefHeight="44.0" prefWidth="80.0" text="Edit Project" />
+      <Button fx:id="newTaskButton" layoutX="721.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newTaskModal" prefHeight="25.0" prefWidth="237.0" text="New Task" />
+      <Button fx:id="applyPriorityFilter" layoutX="721.0" layoutY="192.0" mnemonicParsing="false" onMouseClicked="#applyFilter" prefHeight="25.0" prefWidth="64.0" text="Apply" />
+      <ChoiceBox fx:id="filterChoiceBox" layoutX="794.0" layoutY="192.0" prefHeight="25.0" prefWidth="164.0" />
+      <Label fx:id="creatorLabel" layoutX="42.0" layoutY="123.0" text="Created by: ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="createdDateLabel" layoutX="42.0" layoutY="153.0" text="Created In:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <ListView fx:id="fileListView" layoutX="455.0" layoutY="192.0" prefHeight="428.0" prefWidth="237.0" />
+      <ListView fx:id="taskListView" layoutX="721.0" layoutY="226.0" prefHeight="395.0" prefWidth="237.0" />
+      <Button layoutX="785.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#saveButtonClicked" prefHeight="36.0" prefWidth="164.0" text="Save to Database" />
+      <Button layoutX="42.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#backButtonClicked" prefHeight="25.0" prefWidth="80.0" text="Back" />
     </children>
     <effect>
         <DisplacementMap>

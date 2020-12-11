@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Task.EditTaskController">
+    <children>
+        <TextArea fx:id="descriptionTextArea" layoutX="86.0" layoutY="157.0" prefHeight="129.0" prefWidth="423.0" promptText="Description..." />
+        <Label layoutX="167.0" layoutY="29.0" text="Edit task">
+            <font>
+                <Font size="32.0" />
+            </font>
+        </Label>
+        <TextField fx:id="nameTextField" layoutX="86.0" layoutY="92.0" prefHeight="33.0" prefWidth="423.0" promptText="Task Name...">
+            <font>
+                <Font size="19.0" />
+            </font>
+        </TextField>
+        <Button fx:id="editTaskButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#editTaskClicked" prefHeight="25.0" prefWidth="112.0" text="Edit Task" />
+        <DatePicker fx:id="deadlineDatePicker" layoutX="86.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" />
+        <ChoiceBox fx:id="priorityChoiceBox" layoutX="317.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" />
+    </children>
+</AnchorPane>
