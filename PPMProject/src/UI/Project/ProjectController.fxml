@@ -42,7 +42,7 @@
       </Label>
       <ListView fx:id="fileListView" layoutX="455.0" layoutY="192.0" prefHeight="428.0" prefWidth="237.0" />
       <ListView fx:id="taskListView" layoutX="721.0" layoutY="226.0" prefHeight="395.0" prefWidth="237.0" />
-      <Button layoutX="785.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#saveButtonClicked" prefHeight="36.0" prefWidth="164.0" text="Save to Database" />
+      <Button layoutX="785.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#saveButtonClicked" prefHeight="36.0" prefWidth="164.0" text="Save Changes" />
       <Button layoutX="42.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#backButtonClicked" prefHeight="25.0" prefWidth="80.0" text="Back" />
     </children>
     <effect>
