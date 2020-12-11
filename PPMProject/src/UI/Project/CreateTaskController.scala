@@ -3,6 +3,8 @@ package UI.Project
 import UI.Menu.MenuController
 import javafx.fxml.FXML
 import java.time._
+
+import PPMProject.{Database, HighPriority, LowPriority, MediumPriority, Project, Task, User}
 import javafx.scene.control.{Button, ChoiceBox, DatePicker, TextArea, TextField}
 
 class CreateTaskController {
@@ -20,8 +22,11 @@ class CreateTaskController {
    var taskName: String = _
    var taskDescription: String = _
    var taskPriority: String = _
-   var taskDeadline: String = _
-   var parentController: ProjectController = _
+   var taskDeadline: LocalDate = _
+   var parent: ProjectController = _
+   private var project: Project = _
+   private var user: User = _
+   private var database: Database = _
 
    def initialize(): Unit = {
       deadlineDatePicker.setValue(LocalDate.now())
@@ -39,13 +44,32 @@ class CreateTaskController {
          case "Medium priority" => priorityChoiceBox.getValue
          case "Low priority" => priorityChoiceBox.getValue
       }}
-      taskDeadline = deadlineDatePicker.getValue.toString
-      parentController.createTask(taskName, taskDescription, taskPriority, taskDeadline)
+      taskDeadline = deadlineDatePicker.getValue
+      val savedTasks = database.getTableByName("Task")
+      val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
+      val t = new Task({
+         if (savedTasks.records.values.size > 0) savedTasks.records.values.last.asInstanceOf[Task].getId() + 1 else 0
+      }, user.getId, projectEntry._2.getId, deadline = taskDeadline, name = taskName, description = "", priority = {
+         taskPriority match {
+            case "2" => MediumPriority;
+            case "3" => HighPriority;
+            case _ => LowPriority;
+         }
+      })
+      val newProject = projectEntry._2.addTask(t)
+      val tempDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
+      val newDatabase = tempDatabase.insertInTable(t, "Task")
+      parent.setData(newProject, user, newDatabase)
       createTaskButton.getScene.getWindow.hide
    }
 
-   def setParent(parentController: ProjectController): Unit =
-   {
-      this.parentController = parentController
+   def setParent(parent: ProjectController): Unit = {
+      this.parent = parent
+   }
+
+   def setData(project: Project, user: User, database: Database): Unit = {
+      this.project = project
+      this.user = user
+      this.database = database
    }
 }

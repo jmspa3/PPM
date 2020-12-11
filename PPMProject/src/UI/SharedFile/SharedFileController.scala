@@ -3,6 +3,7 @@ package UI.SharedFile
 
 import java.time.{LocalDate, LocalTime}
 
+import PPMProject.SharedFile
 import javafx.fxml.FXML
 import javafx.application.Platform
 import javafx.animation.PauseTransition
@@ -23,16 +24,16 @@ class SharedFileController {
    private var commentListView: ListView[String] = _
 
    private var parentRoot: Parent = _
-   private var file: (String, String) = _
+   private var file: SharedFile = _
 
    def initialize(): Unit = {
    }
 
 
-   def setFile(file: (String, String)): Unit = {
+   def setFile(file: SharedFile): Unit = {
       this.file = file
-      fileNameLabel.setText(file._1)
-      filePathLabel.setText(file._2)
+      fileNameLabel.setText(file.getName())
+      filePathLabel.setText(file.getPath())
    }
 
    def newComment(): Unit = {

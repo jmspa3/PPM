@@ -1,6 +1,8 @@
 package PPMProject
 import java.time._
 
+import org.graalvm.compiler.debug.DebugContext.Description
+
 case class Project(id: Int, ownerId: Int, creationDate: LocalDate = LocalDate.now(), name: String, description: String, memberIds: List[Int] = List(), fileIds: List[Int] = List(), taskIds: List[Int] = List()) extends SavedClass {
 
    def getOwnerId: Int = Project.getOwnerId(this)
@@ -28,7 +30,8 @@ case class Project(id: Int, ownerId: Int, creationDate: LocalDate = LocalDate.no
    def removeTask(taskToRemove: Int): Project = Project.removeTask(this, taskToRemove)
    def getCreationDate: LocalDate = Project.getCreationDate(this)
    def customToString(database: Database): String = Project.customToString(this, database)
-
+   def editDescription(description: String): Project = Project.editDescription(this, description)
+   def editName(name: String): Project = Project.editName(this, description)
 }
 
 
@@ -143,4 +146,11 @@ object Project {
       "ID: " + p.id + "\nName: " + p.name + "\nDescription: " + p.description + "\nOwned By: " + Project.getOwner(p, db).getUsername + "; " + Project.getOwner(p, db).getId + "\nCreated On: " + p.creationDate + "\nMembers: " + Project.getMembersAsString(p, db)
    }
 
+   def editDescription(p: Project, description: String): Project = {
+      Project(p.id, p.ownerId, p.creationDate, p.name, description, p.memberIds, p.fileIds, p.taskIds)
+   }
+
+   def editName(p: Project, name: String): Project = {
+      Project(p.id, p.ownerId, p.creationDate, name, p.description, p.memberIds, p.fileIds, p.taskIds)
+   }
 }

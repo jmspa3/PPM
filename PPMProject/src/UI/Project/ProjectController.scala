@@ -1,5 +1,8 @@
 package UI.Project
 
+import PPMProject.Main.{databasePath, projectMenu}
+import PPMProject.{Database, Project, SharedFile, StorageManager, Task, User}
+import UI.Menu.MenuController
 import UI.SharedFile.SharedFileController
 import UI.Task.TaskController
 import javafx.fxml.{FXML, FXMLLoader}
@@ -27,24 +30,27 @@ class ProjectController {
    @FXML
    private var filterChoiceBox: ChoiceBox[String] = _
 
-   private var projectName : String = _
-   private var projectDescription : String = _
-   private var fileNum: Int = 0
-   private var taskNum: Int = 0
+   private var project: Project = _
+   private var user: User = _
+   private var database: Database = _
    private var parentRoot: Parent = _
+   private var parent: MenuController = _
 
    def onSelected(): Unit = {
       println("Hello World")
    }
-   def setData(projectName: String, projectDescription: String) {
-      this.projectName = projectName
-      this.projectDescription = projectDescription
-      projectNameLabel.setText(projectName)
-      projectDescriptionTextArea.setText(projectDescription)
+   def setData(project: Project, user: User, database: Database) {
+      this.project = project
+      this.database = database
+      this.user = user
+      projectNameLabel.setText(project.getProjectName)
+      projectDescriptionTextArea.setText(project.getProjectDescription)
+      initInfoTextArea()
+      setFileList()
+      setTaskList()
    }
 
    def initialize(): Unit ={
-      initInfoTextArea()
       filterChoiceBox.getItems.add("All tasks")
       filterChoiceBox.setValue("All tasks")
       filterChoiceBox.getItems.add("High priority")
@@ -53,8 +59,9 @@ class ProjectController {
    }
 
    def initInfoTextArea(): Unit ={
-      creatorLabel.setText("Created by: " + "")
-      createdDateLabel.setText("Created in: " + "")
+      creatorLabel.setText("Created by: " + project.getOwner(database).getUsername)
+      createdDateLabel.setText("Created in: " + project.getCreationDate)
+      projectDescriptionTextArea.setText(project.getProjectDescription)
    }
 
    def newFileModal(): Unit = {
@@ -67,18 +74,34 @@ class ProjectController {
       val modalScene = new Scene(mainViewRoot)
       modalStage.setScene(modalScene)
       fxmlLoader.getController[CreateFileController].setParent(this)
+      fxmlLoader.getController[CreateFileController].setData(project, user, database)
       modalStage.show
    }
 
-   def createFile(file: (String, String)): Unit = {
+   def createFileItem(file: SharedFile): Unit = {
       val buttonD = new Button("Delete")
       val buttonV = new Button("View")
-      buttonD.setId(fileNum.toString)
-      buttonV.setId(fileNum.toString)
-      fileNum += 1
-      buttonD.setOnMouseClicked(event => deleteSharedFile(buttonD, event))
-      buttonV.setOnMouseClicked(event => openSharedFile(file))
-      fileListView.getItems.add(new HBox(new Label(file._1), buttonD,buttonV))
+      buttonD.setOnMouseClicked(event => deleteSharedFile(buttonD, file.getId))
+      buttonV.setOnMouseClicked(event => openSharedFile(file.getId))
+      fileListView.getItems.add(new HBox(new Label(file.getName), buttonD, buttonV))
+   }
+
+   def createTaskItem(task: Task): Unit = {
+      val buttonD = new Button("Delete")
+      val buttonV = new Button("View")
+      buttonD.setOnMouseClicked(event => deleteTask(buttonD, task.getId))
+      buttonV.setOnMouseClicked(event => openTask(task.getId))
+      taskListView.getItems.add(new HBox(new Label(task.getName), buttonD, buttonV))
+   }
+
+   def setFileList(): Unit = {
+      fileListView.getItems.clear
+      project.getFiles(database).map(createFileItem(_))
+   }
+
+   def setTaskList(): Unit = {
+      taskListView.getItems.clear
+      project.getTasks(database).map(createTaskItem(_))
    }
 
    def newTaskModal(): Unit = {
@@ -91,40 +114,46 @@ class ProjectController {
       val modalScene = new Scene(mainViewRoot)
       modalStage.setScene(modalScene)
       fxmlLoader.getController[CreateTaskController].setParent(this)
+      fxmlLoader.getController[CreateTaskController].setData(project, user, database)
       modalStage.show
    }
 
-   def createTask(taskName: String, taskDescription: String, taskPriority: String, taskDeadline: String): Unit = {
-      val buttonD = new Button("Delete")
-      val buttonV = new Button("View")
-      buttonD.setId(taskNum.toString)
-      buttonV.setId(taskNum.toString)
-      taskNum += 1
-      buttonD.setOnMouseClicked(event => deleteTask(buttonD, event))
-      buttonV.setOnMouseClicked(event => openTask((taskName, taskDescription, taskPriority, taskDeadline)))
-      taskListView.getItems.add(new HBox(new Label(taskName), buttonD,buttonV))
-   }
-
-   def deleteSharedFile(button: Button, event: MouseEvent): Unit = {
+   def deleteSharedFile(button: Button, fileId: Int): Unit = {
+      val savedFiles = database.getTableByName("SharedFiles")
+      val filesToMaintain = savedFiles.filterTable(fileId)
+      val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
+      val newProject = projectEntry._2.removeFile(fileId)
+      val tempDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
+      val newDatabase = tempDatabase.swapTable("SharedFile", filesToMaintain)
+      this.database = newDatabase
       fileListView.getItems.remove(button.getParent)
    }
 
-   def deleteTask(button: Button, event: MouseEvent): Unit = {
+   def deleteTask(button: Button, taskId: Int): Unit = {
+      val savedTasks = database.getTableByName("Task")
+      val tasksToMaintain = savedTasks.filterTable(taskId)
+      val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
+      val newProject = projectEntry._2.removeTask(taskId)
+      val tempDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
+      val newDatabase = tempDatabase.swapTable("Task", tasksToMaintain)
+      this.database = newDatabase
       taskListView.getItems.remove(button.getParent)
    }
 
-   def openSharedFile(file: (String, String)): Unit = {
+   def openSharedFile(fileId: Int): Unit = {
       val fxmlLoader = new FXMLLoader(getClass.getResource("../SharedFile/SharedFileController.fxml"))
       val root = fxmlLoader.load.asInstanceOf[Region]
+      val file = database.getTableByName("SharedFile").records.asInstanceOf[Map[Int, SharedFile]].find(x => x._2.id == fileId).get._2
       fxmlLoader.getController[SharedFileController].setFile(file)
       fxmlLoader.getController[SharedFileController].setParentRoot(projectNameLabel.getScene.getRoot)
       projectNameLabel.getScene.setRoot(root)
    }
 
-   def openTask(task: (String, String, String, String)): Unit = {
+   def openTask(taskId: Int): Unit = {
       val fxmlLoader = new FXMLLoader(getClass.getResource("../Task/TaskController.fxml"))
       val root = fxmlLoader.load.asInstanceOf[Region]
-      fxmlLoader.getController[TaskController].setData(task)
+      val task = database.getTableByName("Task").records.asInstanceOf[Map[Int, Task]].find(x => x._2.id == taskId).get._2
+      fxmlLoader.getController[TaskController].setData(task, database)
       fxmlLoader.getController[TaskController].setParentRoot(projectNameLabel.getScene.getRoot)
       projectNameLabel.getScene.setRoot(root)
    }
@@ -156,11 +185,14 @@ class ProjectController {
       val modalScene = new Scene(mainViewRoot)
       modalStage.setScene(modalScene)
       fxmlLoader.getController[EditProjectController].setParent(this)
+      fxmlLoader.getController[EditProjectController].setData(project)
       modalStage.show
    }
 
-   def editProject(newName: String, newDescription: String): Unit = {
-      setData(newName, newDescription)
+   def editProject(newProject: Project): Unit = {
+      val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
+      val newDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
+      setData(project, user, newDatabase)
    }
 
    def applyFilter(): Unit = {
@@ -173,15 +205,21 @@ class ProjectController {
    }
 
    def saveButtonClicked(): Unit = {
-      println("funciono")
+      StorageManager.saveDatabase(database, "savedDatabase.shdb")
    }
 
    def backButtonClicked(): Unit = {
       projectNameLabel.getScene.setRoot(parentRoot)
+      parent.setData(user, database)
    }
 
    def setParentRoot(parentRoot: Parent): Unit = {
       this.parentRoot = parentRoot
+   }
+
+   def setParent(parent: MenuController): Unit =
+   {
+      this.parent = parent
    }
 
 }

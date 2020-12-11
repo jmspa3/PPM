@@ -1,6 +1,10 @@
 package PPMProject
 import java.time._
 
+import org.graalvm.compiler.debug.DebugContext.Description
+
+import scala.concurrent.duration.Deadline
+
 sealed trait Priority
 case object LowPriority extends Priority {
    override def toString: String = "Low Priority"
@@ -13,7 +17,7 @@ case object HighPriority extends Priority {
 }
 
 
-case class Task(id: Int, ownerId: Int, projectId: Int, creationDate: LocalDate = LocalDate.now(), deadline: LocalDate, name : String, done : Boolean = false, priority: Priority, memberIds: List[Int] = List(), fileIds: List[Int] = List()) extends SavedClass {
+case class Task(id: Int, ownerId: Int, projectId: Int, creationDate: LocalDate = LocalDate.now(), deadline: LocalDate, name : String, description: String, done : Boolean = false, priority: Priority, memberIds: List[Int] = List(), fileIds: List[Int] = List()) extends SavedClass {
 
    def getId(): Int = Task.getID(this)
    def daysLeft(): Unit = Task.daysLeft(this)
@@ -24,8 +28,12 @@ case class Task(id: Int, ownerId: Int, projectId: Int, creationDate: LocalDate =
    def setDone(): Task = Task.setDone(this)
    def isDone(): Boolean = Task.isDone(this)
    def getName(): String = Task.getName(this)
+   def getDescription: String = Task.getDescription(this)
+   def editDescription(description: String): Task = Task.editDescription(this, description)
    def getPriority(): String = Task.getPriority(this)
-   def setPriority(priority: Priority): Task = Task.setPriority(this, priority)
+   def editPriority(priority: Priority): Task = Task.editPriority(this, priority)
+   def getDeadline(): LocalDate = Task.getDeadline(this)
+   def editDeadline(deadline: LocalDate): Task = Task.editDeadline(this, deadline)
    def editName(newName : String): Task = Task.editName(this)(newName)
    def getMemberIds(): List[Int] = Task.getMemberIds(this)
    def getMembers(database: Database): List[User] = Task.getMembers(this, database)
@@ -43,7 +51,7 @@ object Task{
    // 2: get a date to represent Christmas
 
    def editName(t:Task)(newName:String): Task  = {
-      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, newName, t.done, t.priority, t.memberIds, t.fileIds)
+      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, newName, t.description, t.done, t.priority, t.memberIds, t.fileIds)
    }
 
    def daysLeft(t:Task): Unit = {
@@ -61,12 +69,17 @@ object Task{
    def getName(t:Task): String = {
       t.name
    }
+
+   def getDescription(t: Task): String = {
+      t.description
+   }
+
    def getPriority(t:Task): String = {
       t.priority.toString
    }
 
    def setDone(t:Task): Task = {
-      Task(t.id, t.ownerId, t.projectId ,t.creationDate, t.deadline, t.name, true, t.priority, t.memberIds, t.fileIds)
+      Task(t.id, t.ownerId, t.projectId ,t.creationDate, t.deadline, t.name, t.description, true, t.priority, t.memberIds, t.fileIds)
    }
 
    def getOwnerId(t: Task): Int =
@@ -99,9 +112,12 @@ object Task{
       db.getTableByName("SharedFile").getFromIdList(t.fileIds).asInstanceOf[List[SharedFile]]
    }
 
-   def addFile(t:Task, newFile: SharedFile): Task =
-   {
-      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.done, t.priority, t.memberIds, t.fileIds ++ List(newFile.id))
+   def addFile(t:Task, newFile: SharedFile): Task = {
+      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.description, t.done, t.priority, t.memberIds, t.fileIds ++ List(newFile.id))
+   }
+
+   def getDeadline(t: Task): LocalDate = {
+      t.deadline
    }
 
    def getMemberIds(t: Task): List[Int] =
@@ -118,14 +134,21 @@ object Task{
       Task.getMembers(t, db).foldRight("")(_.getUsername + ", " + _).trim.dropRight(1)
    }
 
-   def setPriority(t: Task, priority: Priority): Task =
+   def editPriority(t: Task, priority: Priority): Task =
    {
-      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.done, priority, t.memberIds, t.fileIds)
+      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.description, t.done, priority, t.memberIds, t.fileIds)
    }
 
-   def addMember(t: Task, newMember: User): Task =
-   {
-      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.done, t.priority, t.memberIds ++ List(newMember.id), t.fileIds)
+   def addMember(t: Task, newMember: User): Task = {
+      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.description, t.done, t.priority, t.memberIds ++ List(newMember.id), t.fileIds)
+   }
+
+   def editDescription(t: Task, description: String): Task = {
+      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, description, t.done, t.priority, t.memberIds, t.fileIds)
+   }
+
+   def editDeadline(t: Task, deadline: LocalDate): Task = {
+      Task(t.id, t.ownerId, t.projectId , t.creationDate, deadline, t.name, t.description, t.done, t.priority, t.memberIds, t.fileIds)
    }
 
 }

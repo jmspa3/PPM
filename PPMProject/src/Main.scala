@@ -7,7 +7,7 @@ import java.time._
 
 object Main {
 
-   val databasePath = "savedFiles"
+   val databasePath = "savedDatabase.shdb"
 
    def main(args: Array[String]): Unit = {
       println("Welcome to PPMProject. Insert your Username: ")
@@ -175,7 +175,7 @@ object Main {
                val priority = readLine.trim
                val t = new Task({
                   if (savedTasks.records.values.size > 0) savedTasks.records.values.last.asInstanceOf[Task].getId() + 1 else 0
-               }, user.getId, projectEntry._2.getId, deadline = deadline, name = newTaskName, priority = {
+               }, user.getId, projectEntry._2.getId, deadline = deadline, name = newTaskName, description = "", priority = {
                   priority match {
                      case "2" => MediumPriority;
                      case "3" => HighPriority;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Login.RegistrationController">
+   <children>
+      <Button layoutX="408.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#registerButtonClicked" text="Register" />
+      <TextField fx:id="usernameTextField" layoutX="133.0" layoutY="200.0" prefHeight="25.0" prefWidth="261.0" promptText="Username..." />
+      <Label layoutX="161.0" layoutY="109.0" text="Register a new User">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <Label fx:id="usernameInUseLabel" layoutX="217.0" layoutY="283.0" text="Username already in use!" textFill="#942525" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

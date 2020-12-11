@@ -1,6 +1,7 @@
 package UI.Task
 
-import UI.Project.AddMemberController
+import PPMProject.{Database, Task}
+import UI.Project.{AddMemberController, ProjectController}
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
 import javafx.scene.control.{Label, ListView, TextArea}
@@ -23,26 +24,21 @@ class TaskController {
    private var fileListView: ListView[Label] = _
 
    private var parentRoot: Parent = _
-   private var taskName: String = _
-   private var taskDescription: String = _
-   private var taskPriority: String = _
-   private var taskDeadline: String = _
+   private var parent: ProjectController = _
+   private var task: Task = _
+   private var database: Database = _
 
 
-   def setData(task: (String, String, String, String)): Unit = {
-      taskName = task._1
-      taskNameLabel.setText(taskName)
-      taskDescription = task._2
-      descriptionTextArea.setText(taskDescription)
-      taskPriority = task._3
-      priorityLabel.setText(taskPriority)
-      taskPriority match {
-         case "High priority" => priorityLabel.setTextFill(Color.DARKRED)
-         case "Medium priority" => priorityLabel.setTextFill(Color.YELLOW)
-         case "Low priority" => priorityLabel.setTextFill(Color.GREEN)
+   def setData(task: Task, database: Database): Unit = {
+      taskNameLabel.setText(task.getName())
+      descriptionTextArea.setText(task.getDescription)
+      priorityLabel.setText(task.getPriority())
+      task.getPriority() match {
+         case "Medium Priority" => priorityLabel.setTextFill(Color.DARKRED)
+         case "Medium Priority" => priorityLabel.setTextFill(Color.YELLOW)
+         case "Low Priority" => priorityLabel.setTextFill(Color.GREEN)
       }
-      taskDeadline = task._4
-      deadlineLabel.setText(taskDeadline)
+      deadlineLabel.setText(task.getDeadline().toString)
    }
 
    def editTaskModal(): Unit = {
@@ -55,12 +51,12 @@ class TaskController {
       val modalScene = new Scene(mainViewRoot)
       modalStage.setScene(modalScene)
       fxmlLoader.getController[EditTaskController].setParent(this)
-      fxmlLoader.getController[EditTaskController].setInitialValues((taskName, taskDescription, taskPriority, taskDeadline))
+      fxmlLoader.getController[EditTaskController].setInitialValues(task)
       modalStage.show
    }
 
-   def editTask(task: (String, String, String, String)): Unit = {
-      setData(task)
+   def editTask(task: Task): Unit = {
+      setData(task, database)
    }
 
    def newMemberModal() = {
