@@ -7,9 +7,9 @@ import javafx.scene.{Parent, Scene}
 import javafx.stage.Stage
 
 
-class HelloMate extends Application {
+class GUIMain extends Application {
   override def start(primaryStage: Stage): Unit = {
-    primaryStage.setTitle("My Hello World App")
+    primaryStage.setTitle("StudentHub: Project Manager")
     val fxmlLoader =
       new FXMLLoader(getClass.getResource("Login/LoginController.fxml"))
     val mainViewRoot: Parent = fxmlLoader.load()
@@ -19,9 +19,8 @@ class HelloMate extends Application {
   }
 }
 object FxApp {
-  //ar task: Task = Task(1,"Jose", LocalDate.now(),false,"High")
 
   def main(args: Array[String]): Unit = {
-    Application.launch(classOf[HelloMate], args: _*)
+    Application.launch(classOf[GUIMain], args: _*)
   }
 }

@@ -1,6 +1,8 @@
 package PPMProject
 import java.time._
 
+import org.graalvm.compiler.debug.DebugContext.Description
+
 case class Project(id: Int, ownerId: Int, creationDate: LocalDate = LocalDate.now(), name: String, description: String, memberIds: List[Int] = List(), fileIds: List[Int] = List(), taskIds: List[Int] = List()) extends SavedClass {
 
    def getOwnerId: Int = Project.getOwnerId(this)
@@ -17,6 +19,7 @@ case class Project(id: Int, ownerId: Int, creationDate: LocalDate = LocalDate.no
    def getFilesAsString(database: Database): String = Project.getFilesAsString(this, database)
    def addFile(newFile: SharedFile): Project = Project.addFile(this, newFile)
    def removeFile(fileToRemove: Int): Project = Project.removeFile(this, fileToRemove)
+   def removeMember(memberToRemove: Int): Project = Project.removeMember(this, memberToRemove)
    def getTaskIds: List[Int] = Project.getTaskIds(this)
    def getTasks(database: Database): List[Task] = Project.getTasks(this, database)
    def getTasksAsString(database: Database): String = Project.getTasksAsString(this, database)
@@ -28,7 +31,8 @@ case class Project(id: Int, ownerId: Int, creationDate: LocalDate = LocalDate.no
    def removeTask(taskToRemove: Int): Project = Project.removeTask(this, taskToRemove)
    def getCreationDate: LocalDate = Project.getCreationDate(this)
    def customToString(database: Database): String = Project.customToString(this, database)
-
+   def editDescription(description: String): Project = Project.editDescription(this, description)
+   def editName(name: String): Project = Project.editName(this, name)
 }
 
 
@@ -101,6 +105,10 @@ object Project {
       Project(p.id, p.ownerId, p.creationDate, p.name, p.description, p.memberIds, p.fileIds.filter(x => x != fileToRemove), p.taskIds)
    }
 
+   def removeMember(p: Project, memberToRemove: Int): Project = {
+      Project(p.id, p.ownerId, p.creationDate, p.name, p.description, p.memberIds.filter(x => x != memberToRemove), p.fileIds, p.taskIds)
+   }
+
    def getTaskIds(p: Project): List[Int] =
    {
       p.taskIds
@@ -143,4 +151,11 @@ object Project {
       "ID: " + p.id + "\nName: " + p.name + "\nDescription: " + p.description + "\nOwned By: " + Project.getOwner(p, db).getUsername + "; " + Project.getOwner(p, db).getId + "\nCreated On: " + p.creationDate + "\nMembers: " + Project.getMembersAsString(p, db)
    }
 
+   def editDescription(p: Project, description: String): Project = {
+      Project(p.id, p.ownerId, p.creationDate, p.name, description, p.memberIds, p.fileIds, p.taskIds)
+   }
+
+   def editName(p: Project, name: String): Project = {
+      Project(p.id, p.ownerId, p.creationDate, name, p.description, p.memberIds, p.fileIds, p.taskIds)
+   }
 }
