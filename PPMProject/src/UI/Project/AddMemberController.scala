@@ -1,6 +1,7 @@
 package UI.Project
 
 import PPMProject.{Database, Project, SavedClass, StorageManager, User}
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.{Label, TextField}
 
@@ -46,5 +47,9 @@ class AddMemberController {
             usernameTextField.getScene.getWindow.hide
          }
       }
+   }
+
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => usernameTextField.getParent.requestFocus)
    }
 }

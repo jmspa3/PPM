@@ -5,6 +5,7 @@ import java.time.LocalDate
 import PPMProject.{Database, HighPriority, LowPriority, MediumPriority, Project, Task}
 import PPMProject.Task.getDescription
 import UI.Project.ProjectController
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.{ChoiceBox, DatePicker, TextArea, TextField}
 
@@ -56,6 +57,10 @@ class EditTaskController {
       this.database = database
       this.task = task
       setInitialValues()
+   }
+
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => nameTextField.getParent.requestFocus)
    }
 
 }

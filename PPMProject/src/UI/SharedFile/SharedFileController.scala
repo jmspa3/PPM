@@ -35,6 +35,7 @@ class SharedFileController {
    private var database: Database = _
 
    def initialize(): Unit = {
+      Platform.runLater(() => fileNameLabel.getParent.requestFocus)
    }
 
 

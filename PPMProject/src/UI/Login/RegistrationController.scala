@@ -1,6 +1,7 @@
 package UI.Login
 
 import PPMProject.{Database, StorageManager, User}
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.Parent
 import javafx.scene.control.{Label, TextField}
@@ -40,4 +41,7 @@ class RegistrationController {
       this.parent = parent
    }
 
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => usernameInUseLabel.getParent.requestFocus)
+   }
 }

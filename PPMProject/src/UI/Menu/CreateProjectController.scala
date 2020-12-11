@@ -2,6 +2,7 @@ package UI.Menu
 
 import PPMProject.{Database, Project, User}
 import UI.Menu.MenuController
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.{Button, TextArea, TextField}
 
@@ -38,5 +39,9 @@ class CreateProjectController {
    def setData(user: User, database: Database): Unit = {
       this.user = user
       this.database = database
+   }
+
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => createProjectButton.getParent.requestFocus)
    }
 }

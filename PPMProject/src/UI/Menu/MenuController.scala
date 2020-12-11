@@ -4,7 +4,9 @@ import java.util
 
 import PPMProject.{Database, Project, User}
 import UI.FxApp
+import UI.Login.LoginController
 import UI.Project.ProjectController
+import javafx.application.Platform
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
 import javafx.scene.control.{Button, Label, ListView, ScrollPane, TextField}
@@ -19,10 +21,6 @@ class MenuController {
    @FXML
    private var button1: Button = _
    @FXML
-   private var textField1: TextField = _
-   @FXML
-   private var textField2: TextField = _
-   @FXML
    private var projectListView: ListView[HBox] = _
    @FXML
    private var usernameLabel: Label = _
@@ -33,11 +31,13 @@ class MenuController {
 
    private var user: User = _
    private var database: Database = _
-
+   private var parentRoot: Parent = _
+   private var parent: LoginController = _
 
 
    def newProjectModal(): Unit = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("Create a new Project")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(button1.getScene.getWindow)
@@ -64,7 +64,10 @@ class MenuController {
       val buttonV = new Button("View")
       buttonD.setOnMouseClicked(event => deleteProject(buttonD, project.getId, event))
       buttonV.setOnMouseClicked(event => openProject(buttonV, project.getId, event))
-      projectListView.getItems.add(new HBox(new Label(project.getProjectName), buttonD, buttonV))
+      val label = new Label(project.getProjectName)
+      label.setMaxWidth(593)
+      label.setPrefWidth(label.getMaxWidth)
+      projectListView.getItems.add(new HBox(label, buttonD, buttonV))
    }
 
    def openProject(btn:Button, projectId: Int, event: MouseEvent): Unit = {
@@ -78,7 +81,7 @@ class MenuController {
    }
 
    @FXML def initialize(): Unit = {
-
+      Platform.runLater(() => titleLabel.getParent.requestFocus)
    }
 
    def setData(user: User, database: Database): Unit = {
@@ -98,6 +101,18 @@ class MenuController {
       user.getParticipatingProjects(database).reverse.map(createProjectItem(_))
    }
 
+   def logoutButtonClicked(): Unit = {
+      titleLabel.getScene.setRoot(parentRoot)
+      parent.setData(database)
+   }
 
+   def setParentRoot(parentRoot: Parent): Unit = {
+      this.parentRoot = parentRoot
+   }
+
+   def setParent(parent: LoginController): Unit =
+   {
+      this.parent = parent
+   }
 
 }

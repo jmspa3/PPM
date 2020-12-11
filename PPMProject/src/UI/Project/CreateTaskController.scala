@@ -5,6 +5,7 @@ import javafx.fxml.FXML
 import java.time._
 
 import PPMProject.{Database, HighPriority, LowPriority, MediumPriority, Project, Task, User}
+import javafx.application.Platform
 import javafx.scene.control.{Button, ChoiceBox, DatePicker, TextArea, TextField}
 
 class CreateTaskController {
@@ -29,6 +30,7 @@ class CreateTaskController {
    private var database: Database = _
 
    def initialize(): Unit = {
+      Platform.runLater(() => nameTextField.getParent.requestFocus)
       deadlineDatePicker.setValue(LocalDate.now())
       priorityChoiceBox.getItems.add("High Priority")
       priorityChoiceBox.setValue("High Priority")

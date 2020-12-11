@@ -4,10 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Task.AddMemberTaskController">
     <children>
-        <Label layoutX="213.0" layoutY="46.0" text="Project Members">
+        <Label layoutX="176.0" layoutY="52.0" text="Project Members">
             <font>
                 <Font size="33.0" />
             </font>
@@ -16,4 +15,3 @@
         <Button fx:id="doneButton" layoutX="434.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#doneButtonClicked" prefHeight="25.0" prefWidth="75.0" text="Done" />
     </children>
 </AnchorPane>
-

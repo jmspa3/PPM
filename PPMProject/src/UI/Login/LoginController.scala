@@ -6,6 +6,7 @@ import PPMProject.{Database, StorageManager, User}
 import PPMProject.Main.databasePath
 import UI.Menu.{CreateProjectController, MenuController}
 import UI.Project
+import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
@@ -31,17 +32,21 @@ class LoginController {
          val root = fxmlLoader.load.asInstanceOf[Region]
          val user = userTable.records.asInstanceOf[Map[Int, User]].find(x => x._2.getUsername.equals(username)).get._2
          fxmlLoader.getController[MenuController].setData(user, database)
+         fxmlLoader.getController[MenuController].setParent(this)
+         fxmlLoader.getController[MenuController].setParentRoot(textField1.getScene.getRoot)
          button1.getScene.setRoot(root)
       }
    }
 
    def initialize(): Unit ={
+      Platform.runLater(() => textField1.getParent.requestFocus)
       val database = StorageManager.readDatabaseFile(databasePath).asInstanceOf[Database]
       setData(database)
    }
 
    def newUserModal(): Unit = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("Register a new user")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(button1.getScene.getWindow)
@@ -56,6 +61,7 @@ class LoginController {
 
    def setData(database: Database): Unit = {
       this.database = database
+      textField1.setText("")
    }
 
 

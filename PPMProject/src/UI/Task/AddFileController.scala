@@ -1,6 +1,7 @@
 package UI.Task
 
 import PPMProject.{Database, SharedFile, Task}
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.{Button, Label, ListView}
 import javafx.scene.layout.HBox
@@ -25,6 +26,8 @@ class AddFileController {
                buttonA.setDisable(true)
             }
             buttonA.setOnMouseClicked(event => addSharedFile(h, label, buttonA))
+            label.setMaxWidth(363)
+            label.setPrefWidth(label.getMaxWidth)
             fileListView.getItems.add(new HBox(label, buttonA))
             createFileList(t)
          }
@@ -54,5 +57,7 @@ class AddFileController {
       createFileList(task.getProject(database).getFiles(database))
    }
 
-
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => fileListView.getParent.requestFocus)
+   }
 }

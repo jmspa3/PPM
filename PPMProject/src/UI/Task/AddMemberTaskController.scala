@@ -1,6 +1,7 @@
 package UI.Task
 
 import PPMProject.{Database, Project, Task, User}
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.{Button, Label, ListView}
 import javafx.scene.layout.HBox
@@ -31,6 +32,8 @@ class AddMemberTaskController {
                label.setDisable(true)
                buttonA.setDisable(true)
             }
+            label.setMaxWidth(363)
+            label.setPrefWidth(label.getMaxWidth)
             buttonA.setOnMouseClicked(event => addMember(h, label, buttonA))
             memberListView.getItems.add(new HBox(label, buttonA))
             createMemberList(t)
@@ -54,5 +57,8 @@ class AddMemberTaskController {
       memberListView.getScene.getWindow.hide
    }
 
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => memberListView.getParent.requestFocus)
+   }
 
 }

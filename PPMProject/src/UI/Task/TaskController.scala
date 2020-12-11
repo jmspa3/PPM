@@ -2,6 +2,7 @@ package UI.Task
 
 import PPMProject.{Database, Project, SharedFile, Task, User}
 import UI.Project.{AddMemberController, ProjectController}
+import javafx.application.Platform
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
 import javafx.scene.control.{Button, Label, ListView, TextArea}
@@ -58,7 +59,10 @@ class TaskController {
    def createMemberItem(user: User): Unit = {
          val buttonD = new Button("Delete")
          buttonD.setOnMouseClicked(event => deleteMember(user.getId))
-         memberListView.getItems.add(new HBox(new Label(user.getUsername), buttonD))
+         val label = new Label(user.getUsername)
+         label.setMaxWidth(152)
+         label.setPrefWidth(label.getMaxWidth)
+         memberListView.getItems.add(new HBox(label, buttonD))
    }
 
    def deleteFile(fileId: Int): Unit = {
@@ -76,7 +80,10 @@ class TaskController {
    def createFileItem(file: SharedFile): Unit = {
       val buttonD = new Button("Delete")
       buttonD.setOnMouseClicked(event => deleteFile(file.getId))
-      fileListView.getItems.add(new HBox(new Label(file.getName()), buttonD))
+      val label = new Label(file.getName())
+      label.setMaxWidth(152)
+      label.setPrefWidth(label.getMaxWidth)
+      fileListView.getItems.add(new HBox(label, buttonD))
    }
 
    def deleteMember(userId: Int): Unit = {
@@ -88,6 +95,7 @@ class TaskController {
 
    def editTaskModal(): Unit = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("Edit your task")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(taskNameLabel.getScene.getWindow)
@@ -102,6 +110,7 @@ class TaskController {
 
    def newMemberModal() = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("Who is responsible for this task?")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(taskNameLabel.getScene.getWindow)
@@ -120,6 +129,7 @@ class TaskController {
 
    def newFileModal() = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("What files are involved in this task?")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(taskNameLabel.getScene.getWindow)
@@ -147,5 +157,9 @@ class TaskController {
 
    def setParent(parent: ProjectController): Unit = {
       this.parent = parent
+   }
+
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => taskNameLabel.getParent.requestFocus)
    }
 }

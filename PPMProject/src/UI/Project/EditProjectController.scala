@@ -1,6 +1,7 @@
 package UI.Project
 
 import PPMProject.Project
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.{TextArea, TextField}
 
@@ -33,6 +34,10 @@ class EditProjectController {
    def setData(project: Project): Unit = {
       this.project = project
       setInitialValues(project.getProjectName, project.getProjectDescription)
+   }
+
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => nameTextField.getParent.requestFocus)
    }
 
 }

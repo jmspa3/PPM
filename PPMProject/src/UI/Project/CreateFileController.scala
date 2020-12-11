@@ -1,6 +1,7 @@
 package UI.Project
 
 import PPMProject.{Database, Project, SharedFile, User}
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.TextField
 import javafx.stage.{FileChooser, Stage}
@@ -48,5 +49,9 @@ class CreateFileController {
       this.project = project
       this.user = user
       this.database = database
+   }
+
+   @FXML def initialize(): Unit = {
+      Platform.runLater(() => filePathTextField.getParent.requestFocus)
    }
 }

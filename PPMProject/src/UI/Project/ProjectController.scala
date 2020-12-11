@@ -5,6 +5,7 @@ import PPMProject.{Comment, Database, Project, SharedFile, StorageManager, Task,
 import UI.Menu.MenuController
 import UI.SharedFile.SharedFileController
 import UI.Task.TaskController
+import javafx.application.Platform
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
 import javafx.scene.control.{Button, ChoiceBox, Label, ListView, ScrollPane, TextArea, TextField}
@@ -47,6 +48,7 @@ class ProjectController {
    }
 
    def initialize(): Unit ={
+      Platform.runLater(() => projectNameLabel.getParent.requestFocus)
       filterChoiceBox.getItems.add("All Tasks")
       filterChoiceBox.setValue("All Tasks")
       filterChoiceBox.getItems.add("High Priority")
@@ -63,6 +65,7 @@ class ProjectController {
 
    def newFileModal(): Unit = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("Upload a new file")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(projectNameLabel.getScene.getWindow)
@@ -80,7 +83,10 @@ class ProjectController {
       val buttonV = new Button("View")
       buttonD.setOnMouseClicked(event => deleteSharedFile(buttonD, file.getId))
       buttonV.setOnMouseClicked(event => openSharedFile(file.getId))
-      fileListView.getItems.add(new HBox(new Label(file.getName), buttonD, buttonV))
+      val label = new Label(file.getName)
+      label.setMaxWidth(127)
+      label.setPrefWidth(label.getMaxWidth)
+      fileListView.getItems.add(new HBox(label, buttonD, buttonV))
    }
 
    def createTaskItem(task: Task): Unit = {
@@ -88,7 +94,10 @@ class ProjectController {
       val buttonV = new Button("View")
       buttonD.setOnMouseClicked(event => deleteTask(buttonD, task.getId))
       buttonV.setOnMouseClicked(event => openTask(task.getId))
-      taskListView.getItems.add(new HBox(new Label(task.getName), buttonD, buttonV))
+      val label = new Label(task.getName)
+      label.setMaxWidth(127)
+      label.setPrefWidth(label.getMaxWidth)
+      taskListView.getItems.add(new HBox(label, buttonD, buttonV))
    }
 
    def createMemberItem(user: User): Unit = {
@@ -96,7 +105,10 @@ class ProjectController {
       else {
          val buttonD = new Button("Delete")
          buttonD.setOnMouseClicked(event => deleteMember(buttonD, user.getId))
-         memberListView.getItems.add(new HBox(new Label(user.getUsername), buttonD))
+         val label = new Label(user.getUsername)
+         label.setMaxWidth(312)
+         label.setPrefWidth(label.getMaxWidth)
+         memberListView.getItems.add(new HBox( label, buttonD))
       }
    }
 
@@ -122,6 +134,7 @@ class ProjectController {
 
    def newTaskModal(): Unit = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("Create a new task")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(projectNameLabel.getScene.getWindow)
@@ -187,6 +200,7 @@ class ProjectController {
 
    def newMemberModal() = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("Add a new member")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(projectNameLabel.getScene.getWindow)
@@ -206,6 +220,7 @@ class ProjectController {
 
    def editProjectModal(): Unit = {
       val modalStage: Stage = new Stage()
+      modalStage.setTitle("Edit your project")
       modalStage.centerOnScreen()
       modalStage.initModality(Modality.APPLICATION_MODAL)
       modalStage.initOwner(projectNameLabel.getScene.getWindow)
