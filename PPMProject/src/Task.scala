@@ -42,6 +42,8 @@ case class Task(id: Int, ownerId: Int, projectId: Int, creationDate: LocalDate =
    def getFileIds(): List[Int] = Task.getFileIds(this)
    def getFiles(database: Database): List[SharedFile] = Task.getFiles(this, database)
    def addFile(newFile: SharedFile): Task = Task.addFile(this, newFile)
+   def removeFile(fileToRemove: Int): Task = Task.removeFile(this, fileToRemove)
+   def removeMember(memberToRemove: Int): Task = Task.removeMember(this, memberToRemove)
 
 }
 
@@ -116,6 +118,10 @@ object Task{
       Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.description, t.done, t.priority, t.memberIds, t.fileIds ++ List(newFile.id))
    }
 
+   def removeFile(t: Task, fileToRemove: Int): Task = {
+      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.description, t.done, t.priority, t.memberIds, t.fileIds.filter(x => x != fileToRemove))
+   }
+
    def getDeadline(t: Task): LocalDate = {
       t.deadline
    }
@@ -141,6 +147,10 @@ object Task{
 
    def addMember(t: Task, newMember: User): Task = {
       Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.description, t.done, t.priority, t.memberIds ++ List(newMember.id), t.fileIds)
+   }
+
+   def removeMember(t: Task, memberToRemove: Int): Task = {
+      Task(t.id, t.ownerId, t.projectId , t.creationDate, t.deadline, t.name, t.description, t.done, t.priority, t.memberIds.filter(x => x != memberToRemove), t.fileIds)
    }
 
    def editDescription(t: Task, description: String): Task = {

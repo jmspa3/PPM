@@ -16,10 +16,6 @@ case class User(id: Int = 0, name: String = "guest", creationDate: LocalDate = L
 
 object User {
 
-   type id = Int
-   type name = String
-   type creationDate = LocalDate
-
    def getUsername(u: User): String = {
       u.name
    }

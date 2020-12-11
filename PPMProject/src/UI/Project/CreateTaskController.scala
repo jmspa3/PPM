@@ -30,19 +30,19 @@ class CreateTaskController {
 
    def initialize(): Unit = {
       deadlineDatePicker.setValue(LocalDate.now())
-      priorityChoiceBox.getItems.add("High priority")
-      priorityChoiceBox.setValue("High priority")
-      priorityChoiceBox.getItems.add("Medium priority")
-      priorityChoiceBox.getItems.add("Low priority")
+      priorityChoiceBox.getItems.add("High Priority")
+      priorityChoiceBox.setValue("High Priority")
+      priorityChoiceBox.getItems.add("Medium Priority")
+      priorityChoiceBox.getItems.add("Low Priority")
    }
 
    def createTaskClicked(): Unit = {
       taskName = nameTextField.getText
       taskDescription = descriptionTextArea.getText
       taskPriority = { priorityChoiceBox.getValue match {
-         case "High priority" => priorityChoiceBox.getValue
-         case "Medium priority" => priorityChoiceBox.getValue
-         case "Low priority" => priorityChoiceBox.getValue
+         case "High Priority" => priorityChoiceBox.getValue
+         case "Medium Priority" => priorityChoiceBox.getValue
+         case "Low Priority" => priorityChoiceBox.getValue
       }}
       taskDeadline = deadlineDatePicker.getValue
       val savedTasks = database.getTableByName("Task")
@@ -51,9 +51,9 @@ class CreateTaskController {
          if (savedTasks.records.values.size > 0) savedTasks.records.values.last.asInstanceOf[Task].getId() + 1 else 0
       }, user.getId, projectEntry._2.getId, deadline = taskDeadline, name = taskName, description = "", priority = {
          taskPriority match {
-            case "2" => MediumPriority;
-            case "3" => HighPriority;
-            case _ => LowPriority;
+            case "High Priority" => HighPriority;
+            case "Medium Priority" => MediumPriority;
+            case "Low Priority" => LowPriority;
          }
       })
       val newProject = projectEntry._2.addTask(t)

@@ -11,6 +11,7 @@ case class SharedFile(id: Int, ownerId: Int, projectId: Int, creationDate: Local
    def getOwner(database: Database): User = SharedFile.getOwner(this, database)
    def getProjectId: Int = SharedFile.getProjectId(this)
    def getProject(database: Database): Project = SharedFile.getProject(this, database)
+   def getCreationDate(): LocalDate = SharedFile.getCreationDate(this)
    def getCommentIds: List[Int] = SharedFile.getCommentIds(this)
    def getComments(database: Database): List[Comment] = SharedFile.getComments(this, database)
    def addComment(newComment: Comment): SharedFile = SharedFile.addComment(this, newComment)
@@ -31,11 +32,13 @@ object SharedFile {
       sh.id
    }
 
-   def getPath(sh: SharedFile) =
-   {
+   def getPath(sh: SharedFile) = {
       sh.path
    }
 
+   def getCreationDate(sh: SharedFile) = {
+      sh.creationDate
+   }
 
    def getOwnerId(sh: SharedFile): Int =
    {

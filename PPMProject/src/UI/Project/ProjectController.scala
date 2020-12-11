@@ -1,7 +1,7 @@
 package UI.Project
 
 import PPMProject.Main.{databasePath, projectMenu}
-import PPMProject.{Database, Project, SharedFile, StorageManager, Task, User}
+import PPMProject.{Comment, Database, Project, SharedFile, StorageManager, Task, User}
 import UI.Menu.MenuController
 import UI.SharedFile.SharedFileController
 import UI.Task.TaskController
@@ -26,7 +26,7 @@ class ProjectController {
    @FXML
    private var taskListView: ListView[HBox] = _
    @FXML
-   private var memberListView: ListView[Label] = _
+   private var memberListView: ListView[HBox] = _
    @FXML
    private var filterChoiceBox: ChoiceBox[String] = _
 
@@ -36,31 +36,28 @@ class ProjectController {
    private var parentRoot: Parent = _
    private var parent: MenuController = _
 
-   def onSelected(): Unit = {
-      println("Hello World")
-   }
    def setData(project: Project, user: User, database: Database) {
       this.project = project
       this.database = database
       this.user = user
-      projectNameLabel.setText(project.getProjectName)
-      projectDescriptionTextArea.setText(project.getProjectDescription)
       initInfoTextArea()
       setFileList()
       setTaskList()
+      setMemberList()
    }
 
    def initialize(): Unit ={
-      filterChoiceBox.getItems.add("All tasks")
-      filterChoiceBox.setValue("All tasks")
-      filterChoiceBox.getItems.add("High priority")
-      filterChoiceBox.getItems.add("Medium priority")
-      filterChoiceBox.getItems.add("Low priority")
+      filterChoiceBox.getItems.add("All Tasks")
+      filterChoiceBox.setValue("All Tasks")
+      filterChoiceBox.getItems.add("High Priority")
+      filterChoiceBox.getItems.add("Medium Priority")
+      filterChoiceBox.getItems.add("Low Priority")
    }
 
    def initInfoTextArea(): Unit ={
       creatorLabel.setText("Created by: " + project.getOwner(database).getUsername)
       createdDateLabel.setText("Created in: " + project.getCreationDate)
+      projectNameLabel.setText(project.getProjectName)
       projectDescriptionTextArea.setText(project.getProjectDescription)
    }
 
@@ -94,14 +91,33 @@ class ProjectController {
       taskListView.getItems.add(new HBox(new Label(task.getName), buttonD, buttonV))
    }
 
+   def createMemberItem(user: User): Unit = {
+      if (project.getOwner(database).equals(user)) memberListView.getItems.add(new HBox(new Label(user.getUsername + " (owner)")))
+      else {
+         val buttonD = new Button("Delete")
+         buttonD.setOnMouseClicked(event => deleteMember(buttonD, user.getId))
+         memberListView.getItems.add(new HBox(new Label(user.getUsername), buttonD))
+      }
+   }
+
    def setFileList(): Unit = {
       fileListView.getItems.clear
-      project.getFiles(database).map(createFileItem(_))
+      project.getFiles(database).reverse.map(createFileItem(_))
    }
 
    def setTaskList(): Unit = {
       taskListView.getItems.clear
-      project.getTasks(database).map(createTaskItem(_))
+      filterChoiceBox.getValue match {
+         case "All Tasks" => project.getTasks(database).reverse.map(createTaskItem(_))
+         case "High Priority" => project.getHighPriorityTasks(database).reverse.map(createTaskItem(_))
+         case "Medium Priority" => project.getMediumPriorityTasks(database).reverse.map(createTaskItem(_))
+         case "Low Priority" => project.getLowPriorityTasks(database).reverse.map(createTaskItem(_))
+      }
+   }
+
+   def setMemberList(): Unit = {
+      memberListView.getItems.clear
+      project.getMembers(database).reverse.map(createMemberItem(_))
    }
 
    def newTaskModal(): Unit = {
@@ -119,12 +135,14 @@ class ProjectController {
    }
 
    def deleteSharedFile(button: Button, fileId: Int): Unit = {
-      val savedFiles = database.getTableByName("SharedFiles")
+      val savedFiles = database.getTableByName("SharedFile")
       val filesToMaintain = savedFiles.filterTable(fileId)
       val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
       val newProject = projectEntry._2.removeFile(fileId)
-      val tempDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
-      val newDatabase = tempDatabase.swapTable("SharedFile", filesToMaintain)
+      val commentsToMaintain = database.getTableByName("Comment").filterTableFromList(savedFiles.records.find(x => x._2.getId.equals(fileId)).get._2.asInstanceOf[SharedFile].getCommentIds)
+      val tempDatabase1 = database.swapTable("Comment", commentsToMaintain)
+      val tempDatabase2 = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
+      val newDatabase = tempDatabase2.swapTable("SharedFile", filesToMaintain)
       this.database = newDatabase
       fileListView.getItems.remove(button.getParent)
    }
@@ -140,11 +158,19 @@ class ProjectController {
       taskListView.getItems.remove(button.getParent)
    }
 
+   def deleteMember(button: Button, userId: Int): Unit = {
+      val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
+      val newProject = projectEntry._2.removeMember(userId)
+      val newDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
+      setData(newProject, user, newDatabase)
+   }
+
    def openSharedFile(fileId: Int): Unit = {
       val fxmlLoader = new FXMLLoader(getClass.getResource("../SharedFile/SharedFileController.fxml"))
       val root = fxmlLoader.load.asInstanceOf[Region]
       val file = database.getTableByName("SharedFile").records.asInstanceOf[Map[Int, SharedFile]].find(x => x._2.id == fileId).get._2
-      fxmlLoader.getController[SharedFileController].setFile(file)
+      fxmlLoader.getController[SharedFileController].setData(file, user, database)
+      fxmlLoader.getController[SharedFileController].setParent(this)
       fxmlLoader.getController[SharedFileController].setParentRoot(projectNameLabel.getScene.getRoot)
       projectNameLabel.getScene.setRoot(root)
    }
@@ -154,6 +180,7 @@ class ProjectController {
       val root = fxmlLoader.load.asInstanceOf[Region]
       val task = database.getTableByName("Task").records.asInstanceOf[Map[Int, Task]].find(x => x._2.id == taskId).get._2
       fxmlLoader.getController[TaskController].setData(task, database)
+      fxmlLoader.getController[TaskController].setParent(this)
       fxmlLoader.getController[TaskController].setParentRoot(projectNameLabel.getScene.getRoot)
       projectNameLabel.getScene.setRoot(root)
    }
@@ -167,12 +194,14 @@ class ProjectController {
       val mainViewRoot: Parent = fxmlLoader.load()
       val modalScene = new Scene(mainViewRoot)
       modalStage.setScene(modalScene)
-      fxmlLoader.getController[AddMemberController].setFunc(addMember)
+      fxmlLoader.getController[AddMemberController].setParent(this)
+      fxmlLoader.getController[AddMemberController].setData(project, database)
       modalStage.show
    }
 
-   def addMember(username: String): Unit = {
-      memberListView.getItems.add(new Label(username))
+   def addMember(database: Database): Unit = {
+      val newProject= database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get._2
+      setData(newProject, user, database)
    }
 
    def editProjectModal(): Unit = {
@@ -192,16 +221,11 @@ class ProjectController {
    def editProject(newProject: Project): Unit = {
       val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
       val newDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
-      setData(project, user, newDatabase)
+      setData(newProject, user, newDatabase)
    }
 
    def applyFilter(): Unit = {
-      filterChoiceBox.getValue match {
-         case "All Tasks" => println(filterChoiceBox.getValue)
-         case "High priority" =>println(filterChoiceBox.getValue)
-         case "Medium priority" =>println(filterChoiceBox.getValue)
-         case "Low priority" =>println(filterChoiceBox.getValue)
-      }
+      setTaskList()
    }
 
    def saveButtonClicked(): Unit = {

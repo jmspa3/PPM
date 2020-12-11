@@ -2,7 +2,7 @@ package UI.Task
 
 import java.time.LocalDate
 
-import PPMProject.{HighPriority, LowPriority, MediumPriority, Task}
+import PPMProject.{Database, HighPriority, LowPriority, MediumPriority, Project, Task}
 import PPMProject.Task.getDescription
 import UI.Project.ProjectController
 import javafx.fxml.FXML
@@ -20,11 +20,11 @@ class EditTaskController {
    private var deadlineDatePicker: DatePicker = _
 
    private var task: Task = _
-
+   private var database: Database = _
 
    private var parent: TaskController = _
 
-   def setInitialValues(task: Task): Unit = {
+   def setInitialValues(): Unit = {
       nameTextField.setText(task.getName)
       descriptionTextArea.setText(getDescription(task))
       priorityChoiceBox.getItems.add("High priority")
@@ -42,7 +42,9 @@ class EditTaskController {
          }
       }
       val newTask = task.editName(nameTextField.getText()).editDescription(descriptionTextArea.getText).editPriority(newPriority).editDeadline(deadlineDatePicker.getValue)
-      parent.editTask(task)
+      val taskEntry = database.getTableByName("Task").records.asInstanceOf[Map[Int, Task]].find(x => x._2.id == task.getId).get
+      val newDatabase = database.swapTable("Task", database.getTableByName("Task").updateTable(taskEntry, newTask))
+      parent.setData(newTask, newDatabase)
       nameTextField.getScene.getWindow.hide
    }
 
@@ -50,8 +52,10 @@ class EditTaskController {
       this.parent = parent
    }
 
-   def setData(task: Task): Unit = {
-
+   def setData(task: Task, database: Database): Unit = {
+      this.database = database
+      this.task = task
+      setInitialValues()
    }
 
 }

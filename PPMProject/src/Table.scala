@@ -5,16 +5,14 @@ import scala.annotation.tailrec
 case class Table(records : Map[Int, SavedClass], tableName : String) {
 
    def insert(entry: SavedClass): Table = Table.insert(this, entry)
-   def filterTable(userId: Int): Table = Table.filterTable(this, userId)
+   def filterTable(id: Int): Table = Table.filterTable(this, id)
    def getFromIdList(idList: List[Int]): List[SavedClass] = Table.getFromIdList(this, idList)
+   def filterTableFromList(idList: List[Int]): Table = Table.filterTableFromList(this, idList)
    def updateTable(oldEntry: (Int,SavedClass), newValue: SavedClass): Table = Table.updateTable(this, oldEntry, newValue)
 }
 
 
 object Table {
-
-   type records = Map[Int, SavedClass]
-   type tableName = String
 
    def insert(table: Table, entry: SavedClass): Table = {
       if (table.records.size != 0) Table(table.records + (table.records.last._1 + 1 -> entry), table.tableName)
@@ -35,20 +33,27 @@ object Table {
       }
    }
 
-   def filterTable(table: Table, userId: Int): Table =
+   def filterTableFromList(table: Table, idList: List[Int]): Table = {
+      idList match {
+         case Nil => table
+         case h::t => filterTableFromList(filterTable(table, h), t)
+      }
+   }
+
+   def filterTable(table: Table, id: Int): Table =
    {
-      val entriesToRemove = getEntriesToRemove(table.records, userId, List())
+      val entriesToRemove = getEntriesToRemove(table.records, id, List())
       new Table(table.records -- entriesToRemove,table.tableName)
    }
 
-   @tailrec def getEntriesToRemove(original: Map[Int, SavedClass], userId: Int, toRemove: List[Int]): List[Int] =
+   @tailrec def getEntriesToRemove(original: Map[Int, SavedClass], id: Int, toRemove: List[Int]): List[Int] =
    {
       original.size match {
          case 0 => toRemove;
          case _ =>
          {
-            if (original.head._2.getId() equals userId) getEntriesToRemove(original.tail, userId, toRemove ++ List(original.head._1))
-            else getEntriesToRemove(original.tail, userId, toRemove)
+            if (original.head._2.getId() equals id) getEntriesToRemove(original.tail, id, toRemove ++ List(original.head._1))
+            else getEntriesToRemove(original.tail, id, toRemove)
          }
       }
    }
@@ -60,9 +65,7 @@ object Table {
 
    def updateTable(t: Table, oldEntry: (Int, SavedClass), newValue: SavedClass): Table =
    {
-      val temp = Table(t.records - oldEntry._1 + (oldEntry._1 -> newValue), t.tableName)
-      println(temp)
-      temp
+      Table(t.records - oldEntry._1 + (oldEntry._1 -> newValue), t.tableName)
    }
 
 }

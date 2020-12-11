@@ -95,7 +95,7 @@ class MenuController {
 
    def setProjectList(): Unit ={
       projectListView.getItems.clear
-      user.getParticipatingProjects(database).map(createProjectItem(_))
+      user.getParticipatingProjects(database).reverse.map(createProjectItem(_))
    }
 
 

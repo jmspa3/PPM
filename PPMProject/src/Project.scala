@@ -19,6 +19,7 @@ case class Project(id: Int, ownerId: Int, creationDate: LocalDate = LocalDate.no
    def getFilesAsString(database: Database): String = Project.getFilesAsString(this, database)
    def addFile(newFile: SharedFile): Project = Project.addFile(this, newFile)
    def removeFile(fileToRemove: Int): Project = Project.removeFile(this, fileToRemove)
+   def removeMember(memberToRemove: Int): Project = Project.removeMember(this, memberToRemove)
    def getTaskIds: List[Int] = Project.getTaskIds(this)
    def getTasks(database: Database): List[Task] = Project.getTasks(this, database)
    def getTasksAsString(database: Database): String = Project.getTasksAsString(this, database)
@@ -31,7 +32,7 @@ case class Project(id: Int, ownerId: Int, creationDate: LocalDate = LocalDate.no
    def getCreationDate: LocalDate = Project.getCreationDate(this)
    def customToString(database: Database): String = Project.customToString(this, database)
    def editDescription(description: String): Project = Project.editDescription(this, description)
-   def editName(name: String): Project = Project.editName(this, description)
+   def editName(name: String): Project = Project.editName(this, name)
 }
 
 
@@ -102,6 +103,10 @@ object Project {
 
    def removeFile(p: Project, fileToRemove: Int): Project = {
       Project(p.id, p.ownerId, p.creationDate, p.name, p.description, p.memberIds, p.fileIds.filter(x => x != fileToRemove), p.taskIds)
+   }
+
+   def removeMember(p: Project, memberToRemove: Int): Project = {
+      Project(p.id, p.ownerId, p.creationDate, p.name, p.description, p.memberIds.filter(x => x != memberToRemove), p.fileIds, p.taskIds)
    }
 
    def getTaskIds(p: Project): List[Int] =

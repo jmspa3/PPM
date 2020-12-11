@@ -471,7 +471,7 @@ object Main {
                val commentContent = readLine.trim
                val newComment = Comment({
                   if (database.getTableByName("Comment").records.size > 0) database.getTableByName("Comment").records.values.toList.asInstanceOf[List[Comment]].last.getId() + 1 else 0
-               }, user.getId, content = commentContent)
+               }, fileId.toInt, user.getId, content = commentContent)
                val newFile = inspectedFile.addComment(newComment)
                val className = "SharedFile"
                val savedFiles = database.getTableByName(className)
