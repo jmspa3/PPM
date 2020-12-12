@@ -3,13 +3,15 @@ package UI.Project
 import PPMProject.{Database, Project, SharedFile, User}
 import javafx.application.Platform
 import javafx.fxml.FXML
-import javafx.scene.control.TextField
+import javafx.scene.control.{Label, TextField}
 import javafx.stage.{FileChooser, Stage}
 
 class CreateFileController {
 
    @FXML
    private var filePathTextField: TextField = _
+   @FXML
+   private var errorLabel: Label = _
 
    private var parentController: ProjectController = _
    private var project: Project = _
@@ -30,18 +32,20 @@ class CreateFileController {
    }
 
    def createFileClicked(): Unit = {
-      val fileName = filePathTextField.getText.split('\\').last
-      val filePath = filePathTextField.getText()
-      val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
-      val savedFiles = database.getTableByName("SharedFile")
-      val sh = new SharedFile({
-         if (savedFiles.records.values.size > 0) savedFiles.records.values.last.asInstanceOf[SharedFile].getId() + 1 else 0
-      }, user.getId, project.getId, fileName = fileName, path = filePath)
-      val newProject = projectEntry._2.addFile(sh)
-      val tempDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
-      val newDatabase = tempDatabase.insertInTable(sh, "SharedFile")
-      parentController.setData(newProject, user, newDatabase)
-      filePathTextField.getScene.getWindow.hide
+      if (!filePathTextField.getText.isEmpty){
+         val fileName = filePathTextField.getText.split('\\').last
+         val filePath = filePathTextField.getText()
+         val projectEntry = database.getTableByName("Project").records.asInstanceOf[Map[Int, Project]].find(x => x._2.id == project.getId).get
+         val savedFiles = database.getTableByName("SharedFile")
+         val sh = new SharedFile({
+            if (savedFiles.records.values.size > 0) savedFiles.records.values.last.asInstanceOf[SharedFile].getId() + 1 else 0
+         }, user.getId, project.getId, fileName = fileName, path = filePath)
+         val newProject = projectEntry._2.addFile(sh)
+         val tempDatabase = database.swapTable("Project", database.getTableByName("Project").updateTable(projectEntry, newProject))
+         val newDatabase = tempDatabase.insertInTable(sh, "SharedFile")
+         parentController.setData(newProject, user, newDatabase)
+         filePathTextField.getScene.getWindow.hide
+      }
    }
 
    def setData(project: Project, user: User, database: Database): Unit =
@@ -53,5 +57,16 @@ class CreateFileController {
 
    @FXML def initialize(): Unit = {
       Platform.runLater(() => filePathTextField.getParent.requestFocus)
+   }
+
+   def checkIfEmptyTextField(): Unit = {
+      if (filePathTextField.getText.isEmpty)
+      {
+         errorLabel.setVisible(true)
+      }
+      else
+      {
+         errorLabel.setVisible(false)
+      }
    }
 }

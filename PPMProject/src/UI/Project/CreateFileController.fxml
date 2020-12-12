@@ -13,6 +13,11 @@
       </Label>
       <TextField fx:id="filePathTextField" layoutX="68.0" layoutY="212.0" prefHeight="29.0" prefWidth="384.0" />
       <Button fx:id="browseButton" layoutX="463.0" layoutY="210.0" mnemonicParsing="false" onMouseClicked="#openFileChooser" prefHeight="29.0" prefWidth="69.0" text="Browse..." />
-      <Button layoutX="413.0" layoutY="313.0" mnemonicParsing="false" onMouseClicked="#createFileClicked" prefHeight="25.0" prefWidth="119.0" text="Upload file" />
+      <Button layoutX="413.0" layoutY="313.0" mnemonicParsing="false" onMouseClicked="#createFileClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="119.0" text="Upload file" />
+      <Label fx:id="errorLabel" layoutX="68.0" layoutY="317.0" text="You can't upload a file with no name!" textFill="#9a0e0e" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
