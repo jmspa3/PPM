@@ -16,7 +16,33 @@
 }
 
 .windows {
-    -fx-window-color:blue;
-    -fx-background-color:white;
+    -fx-window-color:#45575B;
+    -fx-background-color:#45575B;
 }
 
+.login-label {
+    -fx-text-color:white;
+    -fx-text-fill: white;
+}
+
+.login-textfield {
+    -fx-background-radius:20px;
+    -fx-font-size:16px;
+
+}
+
+.login-button {
+    -fx-border-color:'white';
+    -fx-background-color:#45575B;
+     -fx-text-color:'white';
+     -fx-text-fill:'white';
+     -fx-border-radius: 332px;
+}
+
+.login-button:hover{
+     -fx-border-color:'white';
+     -fx-background-color:'white';
+     -fx-text-fill:#45575B;
+     -fx-border-radius: 332px;
+     -fx-background-radius: 332px;
+}

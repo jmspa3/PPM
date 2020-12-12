@@ -7,20 +7,20 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1028.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Menu.MenuController">
     <children>
-        <Label fx:id="titleLabel" layoutX="163.0" layoutY="57.0" prefHeight="73.0" prefWidth="335.0" text="Your projects">
+        <Label fx:id="titleLabel" layoutX="163.0" layoutY="57.0" prefHeight="73.0" prefWidth="335.0" styleClass="login-label" text="Your projects">
             <font>
                 <Font size="35.0" />
             </font>
         </Label>
-      <Button fx:id="button1" layoutX="163.0" layoutY="179.0" mnemonicParsing="false" onMouseClicked="#newProjectModal" prefHeight="48.0" prefWidth="110.0" text="New Project" />
+      <Button fx:id="button1" layoutX="163.0" layoutY="179.0" mnemonicParsing="false" onMouseClicked="#newProjectModal" prefHeight="48.0" prefWidth="110.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="New Project" />
       <Pane layoutX="665.0" layoutY="93.0" prefHeight="110.0" prefWidth="200.0">
          <children>
-            <Label fx:id="usernameLabel" layoutX="14.0" layoutY="27.0" text="Username: " />
-            <Label fx:id="registrationDateLabel" layoutX="14.0" layoutY="65.0" text="Registration Date: " />
+            <Label fx:id="usernameLabel" layoutX="14.0" layoutY="27.0" styleClass="login-label" text="Username: " />
+            <Label fx:id="registrationDateLabel" layoutX="14.0" layoutY="65.0" styleClass="login-label" text="Registration Date: " />
          </children>
       </Pane>
       <ListView fx:id="projectListView" layoutX="163.0" layoutY="269.0" prefHeight="334.0" prefWidth="702.0" />
-      <Button layoutX="783.0" layoutY="62.0" mnemonicParsing="false" onMouseClicked="#logoutButtonClicked" prefHeight="32.0" prefWidth="82.0" text="Logout" />
+      <Button layoutX="783.0" layoutY="62.0" mnemonicParsing="false" onMouseClicked="#logoutButtonClicked" prefHeight="32.0" prefWidth="82.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Logout" />
     </children>
     <effect>
         <DisplacementMap>

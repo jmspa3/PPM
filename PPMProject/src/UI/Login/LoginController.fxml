@@ -4,15 +4,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1028.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Login.LoginController">
+<AnchorPane prefHeight="700.0" prefWidth="1028.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Login.LoginController">
    <children>
-      <TextField fx:id="textField1" layoutX="399.0" layoutY="317.0" prefHeight="36.0" prefWidth="159.0" promptText="Username..." />
-      <Button fx:id="button1" layoutX="564.0" layoutY="320.0" mnemonicParsing="false" onMouseClicked="#onButton1Clicked" prefHeight="30.0" prefWidth="66.0" text="Login" />
-      <Label alignment="CENTER" layoutX="421.0" layoutY="211.0" prefHeight="111.0" prefWidth="186.0" text=" Login">
+      <TextField fx:id="textField1" layoutX="354.0" layoutY="310.0" prefHeight="46.0" prefWidth="320.0" promptText="Username..." styleClass="login-textfield" stylesheets="@../Dashboard.css" />
+      <Button fx:id="button1" layoutX="416.0" layoutY="393.0" mnemonicParsing="false" onMouseClicked="#onButton1Clicked" prefHeight="42.0" prefWidth="196.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Login">
          <font>
-            <Font size="46.0" />
+            <Font size="19.0" />
+         </font></Button>
+      <Label alignment="CENTER" layoutX="348.0" layoutY="185.0" prefHeight="111.0" prefWidth="331.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="StudentHub">
+         <font>
+            <Font size="59.0" />
          </font>
       </Label>
-      <Button layoutX="459.0" layoutY="362.0" mnemonicParsing="false" onMouseClicked="#newUserModal" prefHeight="30.0" prefWidth="110.0" text="Register new user" />
+      <Button layoutX="416.0" layoutY="457.0" mnemonicParsing="false" onMouseClicked="#newUserModal" prefHeight="44.0" prefWidth="196.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Register new user">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
    </children>
 </AnchorPane>
