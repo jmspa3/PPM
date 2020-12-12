@@ -30,9 +30,9 @@ class EditTaskController {
    def setInitialValues(): Unit = {
       nameTextField.setText(task.getName)
       descriptionTextArea.setText(getDescription(task))
-      priorityChoiceBox.getItems.add("High priority")
-      priorityChoiceBox.getItems.add("Medium priority")
-      priorityChoiceBox.getItems.add("Low priority")
+      priorityChoiceBox.getItems.add("High Priority")
+      priorityChoiceBox.getItems.add("Medium Priority")
+      priorityChoiceBox.getItems.add("Low Priority")
       priorityChoiceBox.setValue(task.getPriority())
       deadlineDatePicker.setValue(task.getDeadline())
    }
@@ -41,9 +41,9 @@ class EditTaskController {
       if (!nameTextField.getText.isEmpty){
          val newPriority = {
             priorityChoiceBox.getValue match {
-               case "Low priority" => LowPriority;
-               case "Medium priority" => MediumPriority;
-               case "High priority" => HighPriority;
+               case "Low Priority" => LowPriority;
+               case "Medium Priority" => MediumPriority;
+               case "High Priority" => HighPriority;
             }
          }
          val newTask = task.editName(nameTextField.getText()).editDescription(descriptionTextArea.getText).editPriority(newPriority).editDeadline(deadlineDatePicker.getValue)
