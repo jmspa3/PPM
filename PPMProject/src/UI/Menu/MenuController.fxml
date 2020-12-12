@@ -19,7 +19,7 @@
             <Label fx:id="registrationDateLabel" layoutX="14.0" layoutY="65.0" styleClass="login-label" text="Registration Date: " />
          </children>
       </Pane>
-      <ListView fx:id="projectListView" layoutX="163.0" layoutY="269.0" prefHeight="334.0" prefWidth="702.0" />
+      <ListView fx:id="projectListView" layoutX="163.0" layoutY="269.0" prefHeight="334.0" prefWidth="702.0" stylesheets="@../Dashboard.css" />
       <Button layoutX="783.0" layoutY="62.0" mnemonicParsing="false" onMouseClicked="#logoutButtonClicked" prefHeight="32.0" prefWidth="82.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Logout" />
     </children>
     <effect>

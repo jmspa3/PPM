@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Task.EditTaskController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Task.EditTaskController">
     <children>
         <TextArea fx:id="descriptionTextArea" layoutX="86.0" layoutY="157.0" prefHeight="129.0" prefWidth="423.0" promptText="Description..." />
-        <Label layoutX="167.0" layoutY="29.0" text="Edit task">
+        <Label layoutX="86.0" layoutY="30.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Edit task">
             <font>
                 <Font size="32.0" />
             </font>
@@ -17,8 +17,8 @@
                 <Font size="19.0" />
             </font>
         </TextField>
-        <Button fx:id="editTaskButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#editTaskClicked" prefHeight="25.0" prefWidth="112.0" text="Edit Task" />
+        <Button fx:id="editTaskButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#editTaskClicked" prefHeight="25.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Edit Task" />
         <DatePicker fx:id="deadlineDatePicker" layoutX="86.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" />
-        <ChoiceBox fx:id="priorityChoiceBox" layoutX="317.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" />
+        <ChoiceBox fx:id="priorityChoiceBox" layoutX="317.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" styleClass="login-button" stylesheets="@../Dashboard.css" />
     </children>
 </AnchorPane>

@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Project.CreateTaskController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Project.CreateTaskController">
     <children>
         <TextArea fx:id="descriptionTextArea" layoutX="86.0" layoutY="157.0" prefHeight="129.0" prefWidth="423.0" promptText="Description..." />
-        <Label layoutX="167.0" layoutY="29.0" text="Create a new task">
+        <Label layoutX="167.0" layoutY="29.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Create a new task">
             <font>
                 <Font size="32.0" />
             </font>
@@ -17,9 +17,9 @@
                 <Font size="19.0" />
             </font>
         </TextField>
-        <Button fx:id="createTaskButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#createTaskClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="112.0" text="Create Task" />
-      <DatePicker fx:id="deadlineDatePicker" layoutX="86.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" />
-      <ChoiceBox fx:id="priorityChoiceBox" layoutX="317.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" />
+        <Button fx:id="createTaskButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#createTaskClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Create Task" />
+      <DatePicker fx:id="deadlineDatePicker" layoutX="86.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" stylesheets="@../Dashboard.css" />
+      <ChoiceBox fx:id="priorityChoiceBox" layoutX="317.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" styleClass="login-button" stylesheets="@../Dashboard.css" />
       <Label fx:id="errorLabel" layoutX="86.0" layoutY="345.0" prefHeight="17.0" prefWidth="270.0" text="You can't create a task with no name!" textFill="#971212" visible="false">
          <font>
             <Font size="14.0" />

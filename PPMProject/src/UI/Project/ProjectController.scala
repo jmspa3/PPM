@@ -108,7 +108,9 @@ class ProjectController {
          val label = new Label(user.getUsername)
          label.setMaxWidth(312)
          label.setPrefWidth(label.getMaxWidth)
-         memberListView.getItems.add(new HBox( label, buttonD))
+         val item = new HBox(label, buttonD)
+         item.getStyleClass.add("menu-listview2")
+         memberListView.getItems.add(item)
       }
    }
 

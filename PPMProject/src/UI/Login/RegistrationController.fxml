@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Login.RegistrationController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Login.RegistrationController">
    <children>
-      <Button fx:id="registerButton" layoutX="408.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#registerButtonClicked" onMouseEntered="#checkIfEmptyTextField" text="Register" />
-      <TextField fx:id="usernameTextField" layoutX="133.0" layoutY="200.0" prefHeight="25.0" prefWidth="261.0" promptText="Username..." />
-      <Label layoutX="161.0" layoutY="109.0" text="Register a new User">
+      <Button fx:id="registerButton" layoutX="408.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#registerButtonClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="38.0" prefWidth="75.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Register" />
+      <TextField fx:id="usernameTextField" layoutX="133.0" layoutY="200.0" prefHeight="13.0" prefWidth="262.0" promptText="Username..." styleClass="login-textfield" stylesheets="@../Dashboard.css" />
+      <Label layoutX="161.0" layoutY="109.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Register a new User">
          <font>
             <Font size="32.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="S_RESIZE" />
+         </cursor>
       </Label>
-      <Label fx:id="usernameInUseLabel" alignment="CENTER" layoutX="123.0" layoutY="283.0" prefHeight="21.0" prefWidth="346.0" text="Username already in use!" textFill="#942525">
+      <Label fx:id="usernameInUseLabel" alignment="CENTER" layoutX="123.0" layoutY="283.0" prefHeight="21.0" prefWidth="346.0" styleClass="errormessage" stylesheets="@../Dashboard.css" text="Username already in use!" textFill="#e15f61e3" visible="false">
          <font>
             <Font size="15.0" />
          </font>

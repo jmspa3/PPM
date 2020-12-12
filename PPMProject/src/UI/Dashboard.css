@@ -21,7 +21,7 @@
 }
 
 .login-label {
-    -fx-text-color:white;
+
     -fx-text-fill: white;
 }
 
@@ -34,7 +34,7 @@
 .login-button {
     -fx-border-color:'white';
     -fx-background-color:#45575B;
-     -fx-text-color:'white';
+
      -fx-text-fill:'white';
      -fx-border-radius: 332px;
 }
@@ -45,4 +45,49 @@
      -fx-text-fill:#45575B;
      -fx-border-radius: 332px;
      -fx-background-radius: 332px;
+}
+
+.menu-listview{
+-fx-background-color:#7899a1;
+}
+.menu-listview2{
+-fx-background-color:#7899a1;
+}
+
+.errormessage{
+-fx-text-fill:#f33;
+}
+
+.choice-box .context-menu  {
+ -fx-background-color:#45575B;
+ -fx-text-fill:'white';
+
+
+
+}
+
+.choice-box .menu-item:focused  {
+ -fx-background-color:white;
+ -fx-text-fill:#45575B;
+
+
+}
+.choice-box .menu-item >.label{
+ -fx-text-fill:white;
+}
+
+.choice-box .menu-item:focused >.label{
+ -fx-text-fill:#45575B;
+}
+
+.choice-box {
+   -fx-border-color:'white';
+    -fx-background-color:#45575B;
+     -fx-text-fill:'white';
+     -fx-border-radius: 132px;
+     -fx-mark-color:white;
+}
+
+.choice-box >.label {
+     -fx-text-fill:'white';
 }

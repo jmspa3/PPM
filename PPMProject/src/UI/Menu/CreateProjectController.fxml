@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Menu.CreateProjectController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Menu.CreateProjectController">
    <children>
       <TextArea fx:id="descriptionTextArea" layoutX="86.0" layoutY="157.0" prefHeight="164.0" prefWidth="423.0" promptText="Description..." />
-      <Label layoutX="167.0" layoutY="29.0" text="Create new project">
+      <Label layoutX="167.0" layoutY="29.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Create new project">
          <font>
             <Font size="32.0" />
          </font>
@@ -17,7 +17,7 @@
             <Font size="19.0" />
          </font>
       </TextField>
-      <Button fx:id="createProjectButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#createProjectClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="112.0" text="Create Project" />
+      <Button fx:id="createProjectButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#createProjectClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Create Project" />
       <Label fx:id="errorLabel" layoutX="98.0" layoutY="345.0" prefHeight="19.0" prefWidth="251.0" text="You can't create a project with no name!" textFill="#9a0606" visible="false">
          <font>
             <Font size="13.0" />
