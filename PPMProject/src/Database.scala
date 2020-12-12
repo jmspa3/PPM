@@ -1,6 +1,6 @@
 package PPMProject
 
-import scala.collection.immutable.ListMap
+import scala.collection.immutable.SortedMap
 
 case class Database(tables : List[Table]) {
 
@@ -30,7 +30,7 @@ object Database{
   }
 
   def newDatabase() : Database = {
-    val tableslist = List(Table(ListMap(),"Project"),Table(ListMap(),"Task"),Table(ListMap(),"User"),Table(ListMap(),"SharedFile"), Table(ListMap(), "Comment"))
+    val tableslist = List(Table(SortedMap(),"Project"),Table(SortedMap(),"Task"),Table(SortedMap(),"User"),Table(SortedMap(),"SharedFile"), Table(SortedMap(), "Comment"))
     new Database(tableslist)
   }
 

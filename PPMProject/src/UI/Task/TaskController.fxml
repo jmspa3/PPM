@@ -7,9 +7,9 @@
 <AnchorPane prefHeight="700.0" prefWidth="1028.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Task.TaskController">
    <children>
       <TextArea fx:id="descriptionTextArea" editable="false" layoutX="96.0" layoutY="226.0" prefHeight="353.0" prefWidth="269.0" promptText="Description..." styleClass="text-area" stylesheets="@../Dashboard.css" />
-      <Label fx:id="taskNameLabel" layoutX="98.0" layoutY="70.0" prefHeight="83.0" prefWidth="269.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Task Name">
+      <Label fx:id="taskNameLabel" layoutX="98.0" layoutY="70.0" prefHeight="83.0" prefWidth="525.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Task Name">
          <font>
-            <Font size="35.0" />
+            <Font size="32.0" />
          </font>
       </Label>
       <ListView fx:id="memberListView" focusTraversable="false" layoutX="710.0" layoutY="251.0" prefHeight="285.0" prefWidth="219.0" />
