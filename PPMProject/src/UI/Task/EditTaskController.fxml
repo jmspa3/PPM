@@ -17,8 +17,13 @@
                 <Font size="19.0" />
             </font>
         </TextField>
-        <Button fx:id="editTaskButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#editTaskClicked" prefHeight="25.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Edit Task" />
+        <Button fx:id="editTaskButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#editTaskClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Edit Task" />
         <DatePicker fx:id="deadlineDatePicker" layoutX="86.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" />
         <ChoiceBox fx:id="priorityChoiceBox" layoutX="317.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" styleClass="login-button" stylesheets="@../Dashboard.css" />
+      <Label fx:id="errorLabel" alignment="CENTER" layoutX="86.0" layoutY="346.0" prefHeight="17.0" prefWidth="290.0" styleClass="errormessage" stylesheets="@../Dashboard.css" text="You can't create a task with no name!" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

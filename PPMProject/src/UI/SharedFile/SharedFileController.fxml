@@ -17,7 +17,7 @@
                 <Font size="35.0" />
             </font>
         </Label>
-        <Button fx:id="newCommentButton" layoutX="137.0" layoutY="631.0" mnemonicParsing="false" onMouseClicked="#newComment" prefHeight="25.0" prefWidth="754.0" styleClass="login-button" text="Send Comment" />
+        <Button fx:id="newCommentButton" layoutX="137.0" layoutY="631.0" mnemonicParsing="false" onMouseClicked="#newComment" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="754.0" styleClass="login-button" text="Send Comment" />
         <Label fx:id="creatorLabel" layoutX="140.0" layoutY="156.0" styleClass="login-label" text="Uploaded by: ">
             <font>
                 <Font size="15.0" />
@@ -28,14 +28,19 @@
                 <Font size="15.0" />
             </font>
         </Label>
-      <TextArea fx:id="commentTextArea" layoutX="137.0" layoutY="538.0" prefHeight="82.0" prefWidth="754.0" promptText="Write your comment..." />
+      <TextArea fx:id="commentTextArea" layoutX="137.0" layoutY="538.0" prefHeight="82.0" prefWidth="754.0" promptText="Write your comment..." wrapText="true" />
       <Label fx:id="filePathLabel" layoutX="140.0" layoutY="128.0" styleClass="login-label" text="Full file path: ">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <ListView fx:id="commentListView" layoutX="137.0" layoutY="222.0" prefHeight="310.0" prefWidth="754.0" />
+      <ListView fx:id="commentListView" focusTraversable="false" layoutX="137.0" layoutY="222.0" prefHeight="310.0" prefWidth="754.0" />
       <Button layoutX="131.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#backButtonClicked" prefHeight="25.0" prefWidth="78.0" styleClass="login-button" text="Back" />
+      <Label fx:id="errorLabel" alignment="CENTER" layoutX="137.0" layoutY="665.0" prefHeight="17.0" prefWidth="754.0" styleClass="errormessage" stylesheets="@../Dashboard.css" text="You can't post a comment with no text!" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
     </children>
     <effect>
         <DisplacementMap>

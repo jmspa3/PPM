@@ -20,7 +20,7 @@
         <Button fx:id="createTaskButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#createTaskClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Create Task" />
       <DatePicker fx:id="deadlineDatePicker" layoutX="86.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" stylesheets="@../Dashboard.css" />
       <ChoiceBox fx:id="priorityChoiceBox" layoutX="317.0" layoutY="305.0" prefHeight="25.0" prefWidth="192.0" styleClass="login-button" stylesheets="@../Dashboard.css" />
-      <Label fx:id="errorLabel" layoutX="86.0" layoutY="345.0" prefHeight="17.0" prefWidth="270.0" text="You can't create a task with no name!" textFill="#971212" visible="false">
+      <Label fx:id="errorLabel" layoutX="86.0" layoutY="345.0" prefHeight="17.0" prefWidth="270.0" styleClass="errormessage" stylesheets="@../Dashboard.css" text="You can't create a task with no name!" textFill="#971212" visible="false">
          <font>
             <Font size="14.0" />
          </font>

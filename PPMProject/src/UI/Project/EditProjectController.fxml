@@ -17,6 +17,11 @@
                 <Font size="19.0" />
             </font>
         </TextField>
-        <Button fx:id="editProjectButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#editProjectClicked" prefHeight="25.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Edit Project" />
+        <Button fx:id="editProjectButton" layoutX="397.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#editProjectClicked" onMouseEntered="#checkIfEmptyTextField" prefHeight="25.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Edit Project" />
+      <Label fx:id="errorLabel" layoutX="86.0" layoutY="346.0" styleClass="errormessage" stylesheets="@../Dashboard.css" text="You can't have a project with no name!" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

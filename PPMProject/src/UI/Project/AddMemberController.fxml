@@ -17,7 +17,7 @@
             </font>
         </TextField>
         <Button fx:id="createProjectButton" layoutX="396.0" layoutY="289.0" mnemonicParsing="false" onMouseClicked="#addMemberClicked" prefHeight="42.0" prefWidth="112.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Add member" />
-      <Label fx:id="errorLabel" layoutX="89.0" layoutY="289.0" text="Label" textFill="#942929" visible="false">
+      <Label fx:id="errorLabel" layoutX="89.0" layoutY="289.0" styleClass="errormessage" stylesheets="@../Dashboard.css" text="Label" textFill="#942929" visible="false">
          <font>
             <Font size="14.0" />
          </font>

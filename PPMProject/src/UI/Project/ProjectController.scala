@@ -84,7 +84,7 @@ class ProjectController {
       buttonD.setOnMouseClicked(event => deleteSharedFile(buttonD, file.getId))
       buttonV.setOnMouseClicked(event => openSharedFile(file.getId))
       val label = new Label(file.getName)
-      label.setMaxWidth(127)
+      label.setMaxWidth(120)
       label.setPrefWidth(label.getMaxWidth)
       fileListView.getItems.add(new HBox(label, buttonD, buttonV))
    }
@@ -95,7 +95,7 @@ class ProjectController {
       buttonD.setOnMouseClicked(event => deleteTask(buttonD, task.getId))
       buttonV.setOnMouseClicked(event => openTask(task.getId))
       val label = new Label(task.getName)
-      label.setMaxWidth(127)
+      label.setMaxWidth(120)
       label.setPrefWidth(label.getMaxWidth)
       taskListView.getItems.add(new HBox(label, buttonD, buttonV))
    }
@@ -106,10 +106,9 @@ class ProjectController {
          val buttonD = new Button("Delete")
          buttonD.setOnMouseClicked(event => deleteMember(buttonD, user.getId))
          val label = new Label(user.getUsername)
-         label.setMaxWidth(312)
+         label.setMaxWidth(307)
          label.setPrefWidth(label.getMaxWidth)
          val item = new HBox(label, buttonD)
-         item.getStyleClass.add("menu-listview2")
          memberListView.getItems.add(item)
       }
    }

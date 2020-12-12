@@ -29,10 +29,9 @@ class AddMemberTaskController {
             val buttonA = new Button("Add")
             val label = new Label(h.getUsername)
             if (task.getMembers(database).contains(h)) {
-               label.setDisable(true)
                buttonA.setDisable(true)
             }
-            label.setMaxWidth(363)
+            label.setMaxWidth(358)
             label.setPrefWidth(label.getMaxWidth)
             buttonA.setOnMouseClicked(event => addMember(h, label, buttonA))
             memberListView.getItems.add(new HBox(label, buttonA))

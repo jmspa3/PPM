@@ -23,7 +23,7 @@
             <Font size="35.0" />
          </font>
       </Label>
-      <ListView fx:id="memberListView" layoutX="44.0" layoutY="475.0" prefHeight="145.0" prefWidth="381.0" stylesheets="@../Dashboard.css" />
+      <ListView fx:id="memberListView" focusTraversable="false" layoutX="44.0" layoutY="475.0" prefHeight="145.0" prefWidth="381.0" stylesheets="@../Dashboard.css" />
       <Button fx:id="newMemberButton" layoutX="44.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newMemberModal" prefHeight="25.0" prefWidth="383.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Add Member" />
       <TextArea fx:id="projectDescriptionTextArea" editable="false" layoutX="43.0" layoutY="192.0" prefHeight="264.0" prefWidth="383.0" promptText="This project has no description..." />
       <Button fx:id="editProjectButton" layoutX="319.0" layoutY="67.0" mnemonicParsing="false" onMouseClicked="#editProjectModal" prefHeight="44.0" prefWidth="106.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Edit Project" />
@@ -40,8 +40,8 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <ListView fx:id="fileListView" layoutX="455.0" layoutY="192.0" prefHeight="428.0" prefWidth="237.0" />
-      <ListView fx:id="taskListView" layoutX="721.0" layoutY="226.0" prefHeight="395.0" prefWidth="237.0" />
+      <ListView fx:id="fileListView" focusTraversable="false" layoutX="455.0" layoutY="192.0" prefHeight="428.0" prefWidth="237.0" />
+      <ListView fx:id="taskListView" focusTraversable="false" layoutX="721.0" layoutY="226.0" prefHeight="395.0" prefWidth="237.0" />
       <Button layoutX="785.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#saveButtonClicked" prefHeight="36.0" prefWidth="164.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Save Changes" />
       <Button layoutX="42.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#backButtonClicked" prefHeight="25.0" prefWidth="80.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Back" />
     </children>

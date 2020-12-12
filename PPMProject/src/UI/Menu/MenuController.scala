@@ -65,7 +65,7 @@ class MenuController {
       buttonD.setOnMouseClicked(event => deleteProject(buttonD, project.getId, event))
       buttonV.setOnMouseClicked(event => openProject(buttonV, project.getId, event))
       val label = new Label(project.getProjectName)
-      label.setMaxWidth(593)
+      label.setMaxWidth(589)
       label.setPrefWidth(label.getMaxWidth)
       projectListView.getItems.add(new HBox(label, buttonD, buttonV))
    }

@@ -7,7 +7,7 @@ import PPMProject.Task.getDescription
 import UI.Project.ProjectController
 import javafx.application.Platform
 import javafx.fxml.FXML
-import javafx.scene.control.{ChoiceBox, DatePicker, TextArea, TextField}
+import javafx.scene.control.{ChoiceBox, DatePicker, Label, TextArea, TextField}
 
 class EditTaskController {
 
@@ -19,6 +19,8 @@ class EditTaskController {
    private var priorityChoiceBox: ChoiceBox[String] = _
    @FXML
    private var deadlineDatePicker: DatePicker = _
+   @FXML
+   private var errorLabel: Label = _
 
    private var task: Task = _
    private var database: Database = _
@@ -36,17 +38,20 @@ class EditTaskController {
    }
 
    def editTaskClicked(): Unit ={
-      val newPriority =  { priorityChoiceBox.getValue match {
-         case "Low priority" => LowPriority;
-         case "Medium priority" => MediumPriority;
-         case "High priority" => HighPriority;
+      if (!nameTextField.getText.isEmpty){
+         val newPriority = {
+            priorityChoiceBox.getValue match {
+               case "Low priority" => LowPriority;
+               case "Medium priority" => MediumPriority;
+               case "High priority" => HighPriority;
+            }
          }
+         val newTask = task.editName(nameTextField.getText()).editDescription(descriptionTextArea.getText).editPriority(newPriority).editDeadline(deadlineDatePicker.getValue)
+         val taskEntry = database.getTableByName("Task").records.asInstanceOf[Map[Int, Task]].find(x => x._2.id == task.getId).get
+         val newDatabase = database.swapTable("Task", database.getTableByName("Task").updateTable(taskEntry, newTask))
+         parent.setData(newTask, newDatabase)
+         nameTextField.getScene.getWindow.hide
       }
-      val newTask = task.editName(nameTextField.getText()).editDescription(descriptionTextArea.getText).editPriority(newPriority).editDeadline(deadlineDatePicker.getValue)
-      val taskEntry = database.getTableByName("Task").records.asInstanceOf[Map[Int, Task]].find(x => x._2.id == task.getId).get
-      val newDatabase = database.swapTable("Task", database.getTableByName("Task").updateTable(taskEntry, newTask))
-      parent.setData(newTask, newDatabase)
-      nameTextField.getScene.getWindow.hide
    }
 
    def setParent(parent: TaskController): Unit = {
@@ -61,6 +66,17 @@ class EditTaskController {
 
    @FXML def initialize(): Unit = {
       Platform.runLater(() => nameTextField.getParent.requestFocus)
+   }
+
+   def checkIfEmptyTextField(): Unit = {
+      if (nameTextField.getText.isEmpty)
+      {
+         errorLabel.setVisible(true)
+      }
+      else
+      {
+         errorLabel.setVisible(false)
+      }
    }
 
 }

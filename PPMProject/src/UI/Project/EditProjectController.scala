@@ -3,7 +3,7 @@ package UI.Project
 import PPMProject.Project
 import javafx.application.Platform
 import javafx.fxml.FXML
-import javafx.scene.control.{TextArea, TextField}
+import javafx.scene.control.{Label, TextArea, TextField}
 
 class EditProjectController {
 
@@ -11,14 +11,18 @@ class EditProjectController {
    private var nameTextField: TextField = _
    @FXML
    private var descriptionTextArea: TextArea = _
+   @FXML
+   private var errorLabel: Label = _
 
    private var parent: ProjectController = _
    private var project: Project = _
 
    def editProjectClicked(): Unit ={
-      val newProject = project.editName(nameTextField.getText).editDescription(descriptionTextArea.getText)
-      parent.editProject(newProject)
-      nameTextField.getScene.getWindow.hide
+      if (!nameTextField.getText.isEmpty) {
+         val newProject = project.editName(nameTextField.getText).editDescription(descriptionTextArea.getText)
+         parent.editProject(newProject)
+         nameTextField.getScene.getWindow.hide
+      }
    }
 
    def setInitialValues(projectName: String, projectDescription: String): Unit =
@@ -38,6 +42,17 @@ class EditProjectController {
 
    @FXML def initialize(): Unit = {
       Platform.runLater(() => nameTextField.getParent.requestFocus)
+   }
+
+   def checkIfEmptyTextField(): Unit = {
+      if (nameTextField.getText.isEmpty)
+      {
+         errorLabel.setVisible(true)
+      }
+      else
+      {
+         errorLabel.setVisible(false)
+      }
    }
 
 }

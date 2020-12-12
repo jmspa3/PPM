@@ -42,9 +42,9 @@ class TaskController {
       descriptionTextArea.setText(task.getDescription)
       priorityLabel.setText(task.getPriority())
       task.getPriority() match {
-         case "High Priority" => priorityLabel.setTextFill(Color.DARKRED)
+         case "High Priority" => priorityLabel.setTextFill(Color.rgb(255,51,51))
          case "Medium Priority" => priorityLabel.setTextFill(Color.YELLOW)
-         case "Low Priority" => priorityLabel.setTextFill(Color.GREEN)
+         case "Low Priority" => priorityLabel.setTextFill(Color.LIGHTGREEN)
       }
       deadlineLabel.setText(task.getDeadline().toString)
       setFileList()
@@ -60,7 +60,7 @@ class TaskController {
          val buttonD = new Button("Delete")
          buttonD.setOnMouseClicked(event => deleteMember(user.getId))
          val label = new Label(user.getUsername)
-         label.setMaxWidth(152)
+         label.setMaxWidth(147)
          label.setPrefWidth(label.getMaxWidth)
          memberListView.getItems.add(new HBox(label, buttonD))
    }
@@ -81,7 +81,7 @@ class TaskController {
       val buttonD = new Button("Delete")
       buttonD.setOnMouseClicked(event => deleteFile(file.getId))
       val label = new Label(file.getName())
-      label.setMaxWidth(152)
+      label.setMaxWidth(147)
       label.setPrefWidth(label.getMaxWidth)
       fileListView.getItems.add(new HBox(label, buttonD))
    }

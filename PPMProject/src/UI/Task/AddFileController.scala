@@ -22,11 +22,10 @@ class AddFileController {
             val buttonA = new Button("Add")
             val label = new Label(h.getName())
             if (task.getFiles(database).contains(h)) {
-               label.setDisable(true)
                buttonA.setDisable(true)
             }
             buttonA.setOnMouseClicked(event => addSharedFile(h, label, buttonA))
-            label.setMaxWidth(363)
+            label.setMaxWidth(358)
             label.setPrefWidth(label.getMaxWidth)
             fileListView.getItems.add(new HBox(label, buttonA))
             createFileList(t)

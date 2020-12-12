@@ -27,6 +27,8 @@ class SharedFileController {
    private var commentTextArea: TextArea = _
    @FXML
    private var commentListView: ListView[String] = _
+   @FXML
+   private var errorLabel: Label = _
 
    private var parentRoot: Parent = _
    private var parent: ProjectController = _
@@ -68,16 +70,18 @@ class SharedFileController {
 
    def newComment(): Unit = {
       val commentContent = commentTextArea.getText
-      val comment = Comment({
-         if (database.getTableByName("Comment").records.size > 0) database.getTableByName("Comment").records.values.toList.asInstanceOf[List[Comment]].last.getId() + 1 else 0
-      }, file.getId, user.getId, content = commentContent)
-      commentTextArea.setText("")
-      val fileEntry = database.getTableByName("SharedFile").records.asInstanceOf[Map[Int, SharedFile]].find(x => x._2.id == file.getId).get
-      val newFile = file.addComment(comment)
-      val savedFiles = database.getTableByName("SharedFile")
-      val tempDatabase = database.swapTable("SharedFile", savedFiles.updateTable(fileEntry, newFile))
-      val newDatabase = tempDatabase.insertInTable(comment, "Comment")
-      setData(newFile, user, newDatabase)
+      if (!commentContent.isEmpty){
+         val comment = Comment({
+            if (database.getTableByName("Comment").records.size > 0) database.getTableByName("Comment").records.values.toList.asInstanceOf[List[Comment]].last.getId() + 1 else 0
+         }, file.getId, user.getId, content = commentContent)
+         commentTextArea.setText("")
+         val fileEntry = database.getTableByName("SharedFile").records.asInstanceOf[Map[Int, SharedFile]].find(x => x._2.id == file.getId).get
+         val newFile = file.addComment(comment)
+         val savedFiles = database.getTableByName("SharedFile")
+         val tempDatabase = database.swapTable("SharedFile", savedFiles.updateTable(fileEntry, newFile))
+         val newDatabase = tempDatabase.insertInTable(comment, "Comment")
+         setData(newFile, user, newDatabase)
+      }
    }
 
    def backButtonClicked(): Unit = {
@@ -93,5 +97,15 @@ class SharedFileController {
       this.parent = parent
    }
 
+   def checkIfEmptyTextField(): Unit = {
+      if (commentTextArea.getText.isEmpty)
+      {
+         errorLabel.setVisible(true)
+      }
+      else
+      {
+         errorLabel.setVisible(false)
+      }
+   }
 
 }

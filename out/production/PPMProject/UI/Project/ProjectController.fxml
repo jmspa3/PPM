@@ -7,43 +7,43 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1028.0" styleClass="windows" stylesheets="@../Dashboard.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Project.ProjectController">
     <children>
-        <Label alignment="CENTER" layoutX="455.0" layoutY="97.0" prefHeight="73.0" prefWidth="237.0" text="Files">
+        <Label alignment="CENTER" layoutX="455.0" layoutY="97.0" prefHeight="73.0" prefWidth="237.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Files">
             <font>
                 <Font size="35.0" />
             </font>
         </Label>
-        <Button fx:id="newFileButton" layoutX="455.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newFileModal" prefHeight="25.0" prefWidth="237.0" text="New File" />
-      <Label alignment="CENTER" layoutX="721.0" layoutY="97.0" prefHeight="73.0" prefWidth="237.0" text="Tasks">
+        <Button fx:id="newFileButton" layoutX="455.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newFileModal" prefHeight="25.0" prefWidth="237.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="New File" />
+      <Label alignment="CENTER" layoutX="721.0" layoutY="97.0" prefHeight="73.0" prefWidth="237.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Tasks">
          <font>
             <Font size="35.0" />
          </font>
       </Label>
-      <Label fx:id="projectNameLabel" layoutX="42.0" layoutY="53.0" prefHeight="73.0" prefWidth="302.0" text="ProjectName">
+      <Label fx:id="projectNameLabel" layoutX="42.0" layoutY="53.0" prefHeight="73.0" prefWidth="302.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="ProjectName">
          <font>
             <Font size="35.0" />
          </font>
       </Label>
-      <ListView fx:id="memberListView" layoutX="44.0" layoutY="475.0" prefHeight="145.0" prefWidth="381.0" />
-      <Button fx:id="newMemberButton" layoutX="44.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newMemberModal" prefHeight="25.0" prefWidth="383.0" text="Add Member" />
+      <ListView fx:id="memberListView" focusTraversable="false" layoutX="44.0" layoutY="475.0" prefHeight="145.0" prefWidth="381.0" stylesheets="@../Dashboard.css" />
+      <Button fx:id="newMemberButton" layoutX="44.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newMemberModal" prefHeight="25.0" prefWidth="383.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Add Member" />
       <TextArea fx:id="projectDescriptionTextArea" editable="false" layoutX="43.0" layoutY="192.0" prefHeight="264.0" prefWidth="383.0" promptText="This project has no description..." />
-      <Button fx:id="editProjectButton" layoutX="345.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#editProjectModal" prefHeight="44.0" prefWidth="80.0" text="Edit Project" />
-      <Button fx:id="newTaskButton" layoutX="721.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newTaskModal" prefHeight="25.0" prefWidth="237.0" text="New Task" />
-      <Button fx:id="applyPriorityFilter" layoutX="721.0" layoutY="192.0" mnemonicParsing="false" onMouseClicked="#applyFilter" prefHeight="25.0" prefWidth="64.0" text="Apply" />
-      <ChoiceBox fx:id="filterChoiceBox" layoutX="794.0" layoutY="192.0" prefHeight="25.0" prefWidth="164.0" />
-      <Label fx:id="creatorLabel" layoutX="42.0" layoutY="123.0" text="Created by: ">
+      <Button fx:id="editProjectButton" layoutX="319.0" layoutY="67.0" mnemonicParsing="false" onMouseClicked="#editProjectModal" prefHeight="44.0" prefWidth="106.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Edit Project" />
+      <Button fx:id="newTaskButton" layoutX="721.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#newTaskModal" prefHeight="25.0" prefWidth="237.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="New Task" />
+      <Button fx:id="applyPriorityFilter" layoutX="721.0" layoutY="192.0" mnemonicParsing="false" onMouseClicked="#applyFilter" prefHeight="25.0" prefWidth="64.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Apply" />
+      <ChoiceBox fx:id="filterChoiceBox" layoutX="794.0" layoutY="192.0" prefHeight="25.0" prefWidth="164.0" stylesheets="@../Dashboard.css" />
+      <Label fx:id="creatorLabel" layoutX="42.0" layoutY="123.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Created by: ">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="createdDateLabel" layoutX="42.0" layoutY="153.0" text="Created In:">
+      <Label fx:id="createdDateLabel" layoutX="42.0" layoutY="153.0" styleClass="login-label" stylesheets="@../Dashboard.css" text="Created In:">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <ListView fx:id="fileListView" layoutX="455.0" layoutY="192.0" prefHeight="428.0" prefWidth="237.0" />
-      <ListView fx:id="taskListView" layoutX="721.0" layoutY="226.0" prefHeight="395.0" prefWidth="237.0" />
-      <Button layoutX="785.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#saveButtonClicked" prefHeight="36.0" prefWidth="164.0" text="Save to Database" />
-      <Button layoutX="42.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#backButtonClicked" prefHeight="25.0" prefWidth="80.0" text="Back" />
+      <ListView fx:id="fileListView" focusTraversable="false" layoutX="455.0" layoutY="192.0" prefHeight="428.0" prefWidth="237.0" />
+      <ListView fx:id="taskListView" focusTraversable="false" layoutX="721.0" layoutY="226.0" prefHeight="395.0" prefWidth="237.0" />
+      <Button layoutX="785.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#saveButtonClicked" prefHeight="36.0" prefWidth="164.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Save Changes" />
+      <Button layoutX="42.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#backButtonClicked" prefHeight="25.0" prefWidth="80.0" styleClass="login-button" stylesheets="@../Dashboard.css" text="Back" />
     </children>
     <effect>
         <DisplacementMap>
